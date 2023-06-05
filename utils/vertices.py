@@ -1,6 +1,9 @@
 
 from mathutils import Vector, Matrix
 import math
+from ..physics.types import PlanDirection
+
+from .plan import *
 
 
 box_line_vertices = (
@@ -19,7 +22,12 @@ box_line_vertices = (
     (1, 1, 1), (1, 1, -1)
 )
 
-def create_box_line_vertices(scale=Vector((1, 1, 1)), position=Vector()):
+
+    
+def create_box_line_vertices(
+        scale: Vector=Vector((1, 1, 1)), 
+        position: Vector=Vector()
+    )->list[tuple[float, float, float]]:
     vertices=list()
     for box_line_vertice in box_line_vertices:
         vertices.append(
@@ -32,21 +40,30 @@ def create_box_line_vertices(scale=Vector((1, 1, 1)), position=Vector()):
     return vertices
 
 
-def create_cylinder_vertices(radius=1, size=1, orientation='z', nb_segment=16, tube_segment_division=4, position=Vector(), start_angle=0, end_angle=2 * math.pi):
+def create_cylinder_line_vertices(
+        radius: float=1,
+        size: float=1,
+        plan_direction: PlanDirection='z',
+        nb_segment: int=16,
+        tube_segment_division: int=4,
+        position: Vector=Vector(),
+        start_angle: float=0,
+        end_angle: float =2 * math.pi
+    ) -> list[tuple[float, float, float]]:
     
 
     half_size = size / 2.0
 
-    if orientation == "x":
+    if plan_direction == 'X':
         cap_offset = Vector((half_size, 0, 0))
-    elif orientation == "y":
+    elif plan_direction == "y":
         cap_offset = Vector((0, half_size, 0))
     else:
         cap_offset = Vector((0, 0, half_size))
 
-    top_cap_vertices = create_circle_vertices(radius, orientation, nb_segment, Vector(
+    top_cap_vertices = create_circle_line_vertices(radius, plan_direction, nb_segment, Vector(
         (position.x + cap_offset.x, position.y + cap_offset.y, position.z + cap_offset.z)), start_angle, end_angle)
-    bottom_cap_vertices = create_circle_vertices(radius, orientation, nb_segment, Vector(
+    bottom_cap_vertices = create_circle_line_vertices(radius, plan_direction, nb_segment, Vector(
         (position.x - cap_offset.x, position.y - cap_offset.y, position.z - cap_offset.z)), start_angle, end_angle)
     tube_vertices = list()
 
@@ -57,29 +74,6 @@ def create_cylinder_vertices(radius=1, size=1, orientation='z', nb_segment=16, t
     return top_cap_vertices + bottom_cap_vertices + tube_vertices
 
 
-def get_x_transposition_vector(orientation =""):
-    if orientation == "x":
-        return Vector((0, 1, 0))
-    elif orientation == "y":
-        return Vector((0, 0, 1))
-    else:
-        return Vector((1, 0, 0))
-    
-def get_y_transposition_vector(orientation =""):
-    if orientation == "x":
-        return Vector((0, 0, 1))
-    elif orientation == "y":
-        return Vector((1, 0, 0))
-    else:
-        return Vector((0, 1, 0))
-
-def vec_2_to_vec_3(orientation, vec_2):
-    if orientation == "x":
-        return Vector((0, vec_2[0], vec_2[1]))
-    elif orientation == "y":
-        return Vector((vec_2[0], 0, vec_2[1]))
-    else:
-        return Vector((vec_2[0], vec_2[1], 0))
 
 square_line_vertices = (
     (-0.5,-0.5), 
@@ -92,147 +86,113 @@ square_line_vertices = (
     (0.5,0.5)
 
 )
+square_tri_vertices = (
+    (-0.5,-0.5), 
+    (0.5,-0.5),
+    (-0.5,0.5), 
+    (0.5,-0.5),
+    (0.5,0.5),
+    (-0.5,0.5),
+)
 
-def vertices2DToVertices(vertices_2d, orientation='z'):
+def vertices_2d_to_vertices(vertices_2d, plan_direction='Z'):
     vertices=list()
-
-    if orientation == "x":
-        mat_coef_x = (0, 1, 0)
-        mat_coef_y = (0, 0, 1)
-    elif orientation == "y":
-        mat_coef_x = (0, 0, 1)
-        mat_coef_y = (1, 0, 0)
-    else:
-        mat_coef_x = (1, 0, 0)
-        mat_coef_y = (0, 1, 0)
 
     for  ind in range(len(vertices_2d)):
-        x = vertices_2d[ind][0]
-        y = vertices_2d[ind][1]
-        # print(ind)
-        vertices.append(
-            (
-                x * mat_coef_x[0] + y * mat_coef_y[0] ,
-                x * mat_coef_x[1] + y * mat_coef_y[1] ,
-                x * mat_coef_x[2] + y * mat_coef_y[2]
-            )
-        )
+        vertices.append(tuple_2_to_vec_3(plan_direction, vertices_2d[ind]))
+        
     
     return vertices
 
 
-def create_square_vertices(size=Vector((1,1,1)), orientation='z',position=Vector((0,0,0))):
+def create_square_tris_vertices(size=Vector((1,1)), plan_direction='Z',position=Vector((0,0))):
     vertices=list()
-
-    # calculate matrix coef based on orientation
-    if orientation == "x":
-        mat_coef_x = (0, 1, 0)
-        mat_coef_y = (0, 0, 1)
-    elif orientation == "y":
-        mat_coef_x = (0, 0, 1)
-        mat_coef_y = (1, 0, 0)
-    else:
-        mat_coef_x = (1, 0, 0)
-        mat_coef_y = (0, 1, 0)
-
     
-    for square_line_vertice in square_line_vertices:
-        x = square_line_vertice[0] * size.x + position.x
-        y = square_line_vertice[1] * size.y + position.y
-
-        # apply matrix coef
-        vertices.append(
-            (
-                x * mat_coef_x[0] + y * mat_coef_y[0] ,
-                x * mat_coef_x[1] + y * mat_coef_y[1] ,
-                x * mat_coef_x[2] + y * mat_coef_y[2]
-            )
-        )
-
+    for square_tri_vertex in square_tri_vertices:
+        
+        vertex2D = (square_tri_vertex[0] * size.x + position.x, square_tri_vertex[1] * size.y + position.y)
+        vertices.append(tuple_2_to_vec_3(plan_direction, vertex2D))
+        
     return vertices
 
-def create_polygon_vertices(vertices_2d, orientation='z', position=Vector((0,0,0))):
+def create_square_line_vertices(size=Vector((1,1)), plan_direction='Z',position=Vector((0,0))):
     vertices=list()
+    
+    for square_line_vertex in square_line_vertices:
+        
+        vertex2D = (square_line_vertex[0] * size.x + position.x, square_line_vertex[1] * size.y + position.y)
+        vertices.append(tuple_2_to_vec_3(plan_direction, vertex2D))
+        
+    return vertices
 
-    if orientation == "x":
-        mat_coef_x = (0, 1, 0)
-        mat_coef_y = (0, 0, 1)
-    elif orientation == "y":
-        mat_coef_x = (0, 0, 1)
-        mat_coef_y = (1, 0, 0)
-    else:
-        mat_coef_x = (1, 0, 0)
-        mat_coef_y = (0, 1, 0)
+def create_polygon_line_vertices(vertices_2d, plan_direction='Z', position=Vector((0,0,0))):
+    vertices=list()
 
     for  ind in range(len(vertices_2d)):
-        x1 = vertices_2d[ind][0] + position.y
-        y1 = vertices_2d[ind][1] + position.z
-        x2 = vertices_2d[(ind+1)%len(vertices_2d)][0] + position.y
-        y2 = vertices_2d[(ind+1)%len(vertices_2d)][1] + position.z
-        # print(ind)
+        vertex1 = (vertices_2d[ind][0] + position.x, vertices_2d[ind][1] + position.y)
+        vertex2 = (vertices_2d[(ind+1)%len(vertices_2d)][0] + position.x, vertices_2d[(ind+1)%len(vertices_2d)][1] + position.y)
+        
         vertices.append(
-            (
-                x1 * mat_coef_x[0] + y1 * mat_coef_y[0] ,
-                x1 * mat_coef_x[1] + y1 * mat_coef_y[1] ,
-                x1 * mat_coef_x[2] + y1 * mat_coef_y[2]
-            )
+            tuple_2_to_vec_3(plan_direction, vertex1)
         )
 
-        # add second vertice
         vertices.append(
-            (        
-                x2 * mat_coef_x[0] + y2 * mat_coef_y[0] ,
-                x2 * mat_coef_x[1] + y2 * mat_coef_y[1] ,
-                x2 * mat_coef_x[2] + y2 * mat_coef_y[2]
-            )
+            tuple_2_to_vec_3(plan_direction, vertex2)
         )
     
     return vertices
 
-
-                
-
-
-def create_circle_vertices(radius=1, orientation='z', nb_segment=32, position=Vector(), start_angle=0, end_angle=2 * math.pi):
+def create_circle_line_vertices(
+        radius: float = 1,
+        plan_direction: PlanDirection = 'Z',
+        nb_segment: int = 32,
+        position: Vector = Vector(),
+        start_angle: float = 0,
+        end_angle: float = 2 * math.pi
+    ):
     vertices=list()
 
-    last_x = 0
-    last_y = 0
     angle_segment = (end_angle - start_angle) / nb_segment
-
-    if orientation == "x":
-        mat_coef_x = (0, 1, 0)
-        mat_coef_y = (0, 0, 1)
-    elif orientation == "y":
-        mat_coef_x = (0, 0, 1)
-        mat_coef_y = (1, 0, 0)
-    else:
-        mat_coef_x = (1, 0, 0)
-        mat_coef_y = (0, 1, 0)
 
     for i in range(nb_segment+1):
         angle = i * angle_segment + start_angle
-        x = math.cos(angle) * radius
-        y = math.sin(angle) * radius
+        
+        vertex2D = (math.cos(angle) * radius + position.x, math.sin(angle) * radius + position.y)
 
         if i != 0:
-            vertices.append(
-                (
-                    last_x * mat_coef_x[0] + last_y *
-                    mat_coef_y[0] + position.x,
-                    last_x * mat_coef_x[1] + last_y *
-                    mat_coef_y[1] + position.y,
-                    last_x * mat_coef_x[2] + last_y *
-                    mat_coef_y[2] + position.z
-                )
-            )
-            vertices.append((
-                x * mat_coef_x[0] + y * mat_coef_y[0] + position.x,
-                x * mat_coef_x[1] + y * mat_coef_y[1] + position.y,
-                x * mat_coef_x[2] + y * mat_coef_y[2] + position.z
-            )
-            )
+            vertices.append(tuple_2_to_vec_3(plan_direction, lastVertex2D))
+            vertices.append(tuple_2_to_vec_3(plan_direction, vertex2D))
 
-        last_x = x
-        last_y = y
+        
+
+        lastVertex2D = vertex2D
+    return vertices
+
+
+
+def create_circle_fill_vertices(
+        radius: float = 1,
+        plan_direction: PlanDirection = 'Z',
+        nb_segment: int = 32,
+        position: Vector = Vector(),
+        start_angle: float = 0,
+        end_angle: float = 2 * math.pi
+    ):
+    vertices=list()
+
+    angle_segment = (end_angle - start_angle) / nb_segment
+
+    for i in range(nb_segment+1):
+        angle = i * angle_segment + start_angle
+        
+        vertex2D = (math.cos(angle) * radius + position.x, math.sin(angle) * radius + position.y)
+
+        if i != 0:
+            vertices.append(tuple_2_to_vec_3(plan_direction, lastVertex2D))
+            vertices.append(tuple_2_to_vec_3(plan_direction, vertex2D))
+            vertices.append(tuple_2_to_vec_3(plan_direction, position.to_tuple()))
+
+        
+
+        lastVertex2D = vertex2D
     return vertices

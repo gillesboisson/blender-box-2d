@@ -1,7 +1,7 @@
 
-from .cylinder_widget import CylinderWidget
-from .box_widget import BoxWidget
-from .sphere_widget import SphereWidget
+from .widgets.cylinder_widget import CylinderWidget
+from .widgets.box_widget import BoxWidget
+from .widgets.sphere_widget import SphereWidget
 
 
 from bpy.types import (

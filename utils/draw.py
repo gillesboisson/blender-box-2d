@@ -1,94 +1,120 @@
-import bpy, blf, gpu, bgl
-from bgl import *
+
+import bpy
+import gpu
 from gpu_extras.batch import batch_for_shader
+from .vertices import vertices_2d_to_vertices, tuple_2_to_vec_3
+from mathutils import Vector, Matrix
+from math import cos, pi, sin
+from ..physics.types import PlanDirection
 
+vert_out = gpu.types.GPUStageInterfaceInfo("three_vert_interface")
+vert_out.smooth('VEC3', "pos")
 
+shader_info = gpu.types.GPUShaderCreateInfo()
+shader_info.push_constant('MAT4', "viewProjectionMatrix")
+shader_info.push_constant('MAT4', "modelMatrix")
+shader_info.push_constant('VEC4', "color")
 
+shader_info.vertex_in(0, 'VEC3', "position")
+shader_info.vertex_out(vert_out)
+shader_info.fragment_out(0, 'VEC4', "FragColor")
 
-
-cube_vertices = (
-    ( -1.0, -1.0,  1.0),
-    ( 1.0, -1.0,  1.0),
-    ( 1.0,  1.0,  1.0),
-    (-1.0,  1.0,  1.0),
-    # back
-    (-1.0, -1.0, -1.0),
-    ( 1.0, -1.0, -1.0),
-    ( 1.0,  1.0, -1.0),
-    (-1.0,  1.0, -1.)
+shader_info.vertex_source(
+    "void main()"
+    "{"
+    "  pos = position;"
+    "  gl_Position = viewProjectionMatrix * modelMatrix * vec4(position, 1.0f);"
+    "}"
 )
 
-cube_indices = (
-    # front
-    (0, 1, 2),
-    (2, 3, 0),
-    # right
-    (1, 5, 6),
-    (6, 2, 1),
-    # back
-    (7, 6, 5),
-    (5, 4, 7),
-    # left
-    (4, 0, 3),
-    (3, 7, 4),
-    # bottom
-    (4, 5, 1),
-    (1, 0, 4),
-    # top
-    (3, 2, 6),
-    (6, 7, 3)
+shader_info.fragment_source(
+    "void main()"
+    "{"
+    "  FragColor = color;"
+    "}"
 )
 
-
-(
-    (-0.5, -0.5, -0.5), (+0.5, -0.5, -0.5),
-    (-0.5, +0.5, -0.5), (+0.5, +0.5, -0.5),
-    (-0.5, -0.5, +0.5), (+0.5, -0.5, +0.5),
-    (-0.5, +0.5, +0.5), (+0.5, +0.5, +0.5))
+shader = gpu.shader.create_from_info(shader_info)
+del vert_out
+del shader_info
 
 
-color_3d_shader = gpu.shader.from_builtin('3D_UNIFORM_COLOR')
-cube_batch = batch_for_shader(color_3d_shader, 'TRIS', {"pos": cube_vertices}, indices=cube_indices)
+def set_shader_uniforms(
+        vp: Matrix,
+        modelMat: Matrix,
+        color: tuple[float, float, float, float]
+    ):
+    shader.uniform_float("viewProjectionMatrix", vp)
+    shader.uniform_float("modelMatrix", modelMat)
+    shader.uniform_float("color",color)
 
-
-def draw_box(mat, color=(1,0,0,1)):
-    color_3d_shader.bind()
-    color_3d_shader.uniform_float("color", color)
-    gpu.matrix.load_matrix
-    glEnable(GL_BLEND)
-    cube_batch.draw(color_3d_shader)
-    glDisable(GL_BLEND)
-
-
-
-def draw_quad(vertices=[], color=(1,1,1,1)):
-
-    indices = [(0, 1, 2), (1, 2, 3)]
-    shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-    batch = batch_for_shader(shader, 'TRIS', {"pos": vertices}, indices=indices)
-    shader.bind()
-    shader.uniform_float("color", color)
-    glEnable(GL_BLEND)
+def draw_polyline(
+        coords: list[tuple[float,float, float]],
+        color: tuple[float, float, float, float],
+        modelMat: Matrix,
+        closePolyline: bool = True
+    ):
+    vp = bpy.context.region_data.perspective_matrix
+    set_shader_uniforms(vp, modelMat, color)
+    polyCoord = coords.copy()
+    if closePolyline:
+        polyCoord.append(coords[0])
+    batch = batch_for_shader(shader, 'LINE_STRIP', {"position": polyCoord})
     batch.draw(shader)
-    glDisable(GL_BLEND)
-    
-    del shader
-    del batch
 
 
-def draw_text(text,x,y,size=12, color=(1,1,1,1)):
-    dpi = bpy.context.preferences.system.dpi
-    font = 0
-    blf.size(font, size, int(dpi))
-    blf.color(font, *color)
-    blf.position(font,x,y,0)
-    blf.draw(font, text)
+def draw_polyline_2D(
+        vertices2d: list[tuple[float,float]],
+        color: tuple[float, float, float, float],
+        orientation: PlanDirection,
+        modelMat: Matrix,
+        closePolyline: bool = True
+    ):
+    vp = bpy.context.region_data.perspective_matrix
+    set_shader_uniforms(vp, modelMat, color)
+    coords = vertices_2d_to_vertices(vertices2d, orientation)
+    if(closePolyline):
+        coords.append(coords[0])
+    batch = batch_for_shader(shader, 'LINE_STRIP', {"position": coords})
+    batch.draw(shader)
 
-def get_blf_text_dimensions(text, size):
-    '''Return dimension of text caption using blf API'''
 
-    dpi = bpy.context.preferences.system.dpi
-    blf.size(0, size, dpi)
-    return blf.dimensions(0, str(text))
-    
 
+
+# square_geom = (
+#     (-0.5,-0.5),
+#     (0.5,-0.5),
+#     (0.5,0.5),
+#     (-0.5,0.5),
+# )
+
+# def draw_square_2D(
+#         color: tuple[float, float, float, float],
+#         orientation: FaceDirection,
+#         modelMat: Matrix
+#     ):
+#     vp = bpy.context.region_data.perspective_matrix
+#     set_shader_uniforms(vp, modelMat, color)
+#     coords = vertices_2d_to_vertices(square_geom, orientation)
+#     coords.append(coords[0])
+#     batch = batch_for_shader(shader, 'LINE_STRIP', {"position": coords})
+#     batch.draw(shader)
+
+
+# def draw_circle_3D(
+#         radius: float,
+#         segments: int,
+#         color: tuple[float, float, float, float],
+#         orientation: FaceDirection,
+#         modelMat: Matrix
+#     ):
+#     vp = bpy.context.region_data.perspective_matrix
+#     set_shader_uniforms(vp, modelMat, color)
+#     coords = list()
+#     for i in range(segments):
+#         angle = 2 * pi * i / segments
+#         vertex2D = (cos(angle) * radius, sin(angle) * radius)
+#         coords.append(vec_2_to_vec_3(orientation, vertex2D))
+#     coords.append(coords[0])
+#     batch = batch_for_shader(shader, 'LINE_STRIP', {"position": coords})
+#     batch.draw(shader)

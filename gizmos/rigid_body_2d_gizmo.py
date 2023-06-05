@@ -1,13 +1,19 @@
 
-from .square_widget import SquareWidget
-from .circle_widget import CircleWidget
-from .polygon_widget import PolygonWidget
+from .widgets.square_fill_widget import SquareFillWidget
+
+from .widgets.circle_widget import CircleWidget
+from .widgets.polygon_widget import PolygonWidget
 
 
 
 from bpy.types import (
     GizmoGroup,
 )
+
+
+body_static_color = (0.5,1.0,0.5)
+body_dynamic_color = (0.5,0.5,1.0)
+
 
 class RigidBody2DWidgetGroup(GizmoGroup):
     bl_idname = "OBJECT_RIGID_BODY_2D_WIDGET_GROUP"
@@ -16,8 +22,7 @@ class RigidBody2DWidgetGroup(GizmoGroup):
     bl_region_type = 'WINDOW'
     bl_options = {'3D', 'PERSISTENT'}
 
-    static_color = (0.5,1.0,0.5)
-    dynamic_color = (0.5,0.5,1.0)
+    
     ob = None
 
     @classmethod
@@ -29,8 +34,8 @@ class RigidBody2DWidgetGroup(GizmoGroup):
         ob = context.object
         scene = context.scene
 
-        self.square_gizmo.target_set_prop("position", ob.data.three_rigid_body_2d.shape, "shape_position")
-        self.square_gizmo.target_set_prop("size", ob.data.three_rigid_body_2d.shape, "shape_box_scale")
+        # self.square_gizmo.target_set_prop("position", ob.data.three_rigid_body_2d.shape, "shape_position")
+        # self.square_gizmo.target_set_prop("size", ob.data.three_rigid_body_2d.shape, "shape_box_scale")
        
 
         self.circle_gizmo.target_set_prop("position", ob.data.three_rigid_body_2d.shape, "shape_position")
@@ -43,16 +48,16 @@ class RigidBody2DWidgetGroup(GizmoGroup):
         # Assign the 'offset' target property to the light energy.
         ob = context.object
 
-        square_bz = self.gizmos.new(SquareWidget.bl_idname)
-        square_bz.use_draw_modal = True
+        square_bz = self.gizmos.new(SquareFillWidget.bl_idname)
+        square_bz.use_draw_modal = False
         self.square_gizmo = square_bz
 
         circle_bz = self.gizmos.new(CircleWidget.bl_idname)
-        circle_bz.use_draw_modal = True
+        circle_bz.use_draw_modal = False
         self.circle_gizmo = circle_bz
 
         polygon_bz = self.gizmos.new(PolygonWidget.bl_idname)
-        polygon_bz.use_draw_modal = True
+        polygon_bz.use_draw_modal = False
         self.polygon_gizmo = polygon_bz
         if(hasattr(ob.data.three_rigid_body_2d.shape,"shape_polygon_vertices")):
             polygon_bz.vertices = ob.data.three_rigid_body_2d.shape.shape_polygon_vertices
@@ -68,17 +73,21 @@ class RigidBody2DWidgetGroup(GizmoGroup):
         ob = context.object
 
         if(ob.data.three_rigid_body_2d.mass == 0 or ob.data.three_rigid_body_2d.body_type == 'static'):
-            color = self.static_color
+            color = body_static_color
         else:
-            color = self.dynamic_color
+            color = body_dynamic_color
 
+        
+        self.square_gizmo.alpha = 0.5
+        self.circle_gizmo.alpha_highlight = 0.9
         self.square_gizmo.color = color
         self.square_gizmo.color_highlight = color
-        self.square_gizmo.hide = ob.data.three_rigid_body_2d.shape.shape_type != 'box'  
+
+        self.square_gizmo.hide = ob.data.three_rigid_body_2d.shape.shape_type != 'box' or True
 
         if(not hasattr(self,"square_gizmo.orientation") or context.scene.three_physics.physics_2d_orientation != self.square_gizmo.orientation ):
             self.square_gizmo.orientation = context.scene.three_physics.physics_2d_orientation
-            self.square_gizmo.setup()
+            # self.square_gizmo.setup()
 
        
         self.circle_gizmo.color = color
@@ -110,4 +119,5 @@ class RigidBody2DWidgetGroup(GizmoGroup):
         self.polygon_gizmo.matrix_basis = ob.matrix_basis
 
        
+
 

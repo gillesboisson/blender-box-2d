@@ -1,13 +1,14 @@
-from .props import register_props, unregister_props
+# from .props import register_props, unregister_props
+# # from .operator import register_operators, unregister_operators
+# from .panel import register_panels, unregister_panels
+# from .gizmos import register_gizmos, unregister_gizmos
 # from .operator import register_operators, unregister_operators
-from .panel import register_panels, unregister_panels
-from .gizmos import register_gizmos, unregister_gizmos
-from .operator import register_operators, unregister_operators
 
+from .physics import register_physics, unregister_physics
 
 bl_info = {
-    "name" : "Test plugin",
-    "description" : "Plugin test",
+    "name" : "Three plugin",
+    "description" : "Three custom tools integration",
     "author" : "Gilles Boisson",
     "version" : (0,1),
     "blender": (2,90,0),
@@ -16,15 +17,10 @@ bl_info = {
 }
 
 def register():
-    register_props()
-    # register_operators()
-    register_panels()
-    register_gizmos()
-    register_operators()
+    register_physics()
 
 def unregister():
-    unregister_props()
-    # unregister_operators()
-    unregister_panels()
-    unregister_gizmos()
-    unregister_operators()
+    unregister_physics()
+
+if __name__ == "__main__":
+    register()
