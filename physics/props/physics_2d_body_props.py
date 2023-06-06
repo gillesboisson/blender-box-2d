@@ -4,7 +4,7 @@ from bpy.props import *
 from bpy.utils import register_class, unregister_class
 
 
-from ..types import Physics3DBodyShapeType, PhysicsBodyType
+from ..types import Physics2DBodyShapeType, PhysicsBodyType
 
 rigid_body_2d_property_name = 'three_rigid_body_2d'
 
@@ -17,7 +17,7 @@ class RigidBody2DShapePropertyGroup(bpy.types.PropertyGroup):
     restitution: FloatProperty(name="Restitution", default=0,min=0,max=10)
     density: FloatProperty(name="Density", default=1,min=0,max=10)
     sensor: BoolProperty(name="Sensor",description="Sensor", default=False)
-    shape_type: EnumProperty(name="Shape", items = Physics3DBodyShapeType, default='box')
+    shape_type: EnumProperty(name="Shape", items = Physics2DBodyShapeType, default='box')
     filter_category_bits: IntProperty(name="Filter category bits", default=1,min=0,max=32)
     filter_mask_bits: IntProperty(name="Filter mask bits", default=65535,min=0,max=65535)
     filter_group_index: IntProperty(name="Filter group index", default=0,min=0,max=32767)

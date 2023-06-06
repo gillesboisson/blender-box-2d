@@ -4,7 +4,7 @@ PhysicsBodyType = (
     ("dynamic", "Dynamic", "Dynamic body"), 
 )
 
-Physics3DBodyShapeType = (
+Physics2DBodyShapeType = (
     ("none", "None", "No shape"),
     ("box", "Box", "Box shape"),
     ("circle", "Circle", "Circle shape"),

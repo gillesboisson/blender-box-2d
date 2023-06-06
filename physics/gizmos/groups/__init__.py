@@ -1,11 +1,13 @@
 
 import bpy
 from .physics_2d_square_edit_gizmo import Physics2DSquareEditGizmo
+from .physics_2d_circle_edit_gizmo import Physics2DCircleEditGizmo
 
 
 
 classes = (
     Physics2DSquareEditGizmo,
+    Physics2DCircleEditGizmo
 )
 
 

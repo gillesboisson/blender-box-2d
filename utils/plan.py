@@ -37,13 +37,6 @@ def clamp_matrix_to_plan(orientation: PlanDirection, matrix: Matrix) -> Matrix:
     loc = matrix.to_translation()
 
     rot_euler = matrix.to_euler()
-
-
-
-
-    
-
-
     
     if orientation == 'X':
         rot_mat = Matrix.Rotation(rot_euler.x, 4, 'X')
@@ -61,45 +54,8 @@ def clamp_matrix_to_plan(orientation: PlanDirection, matrix: Matrix) -> Matrix:
         scale.z = 1
         loc.z = 0
 
-    # rot_mat = rot.to_matrix().to_4x4()
-
-    # normalize rotation matrix
-    # vec_left = rot_mat @ Vector((1,0,0))
-    # vec_left = Vector((1,0,0))
-    # up_vec = axe_vec.cross(vec_left)
-    # up_vec.normalize()
-    # depth_vec = axe_vec.cross(up_vec)
-
-    # final_rot_mat = rot
-    
      
     return Matrix.Translation(loc) @ Matrix.Scale(scale.x, 4, (1,0,0)) @ Matrix.Scale(scale.y, 4, (0,1,0)) @ Matrix.Scale(scale.z, 4, (0,0,1)) @ rot_mat 
-
-
-
-
-
-# orientation_mat_x_inv = orientation_mat_x.inverted()
-# orientation_mat_y_inv = orientation_mat_y.inverted()
-# orientation_mat_z_inv = orientation_mat_z.inverted()
-
-
-# def get_plan_matrix_inverted(orientation: PlanDirection) -> Matrix:
-#     if orientation == 'X':
-#         return orientation_mat_x_inv
-#     elif orientation == "Y":
-#         return orientation_mat_y_inv
-#     else:
-#         return orientation_mat_z_inv
-    
-
-# def get_plan_rotation_matrix(orientation: PlanDirection, rotation: float) -> Matrix:
-#     if orientation == 'X':
-#         return Matrix.Rotation(rotation, 4, 'X')
-#     elif orientation == "Y":
-#         return Matrix.Rotation(rotation, 4, 'Y')
-#     else:
-#         return Matrix.Rotation(rotation, 4, 'Z')
 
 
     

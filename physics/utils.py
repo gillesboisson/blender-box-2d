@@ -18,6 +18,10 @@ def physics_2d_can_edit_square_shape(context):
     return physics_2d_enabled_on_mesh(context) and context.object.data.three_rigid_body_2d.shape.shape_type == 'box'
 
 
+def physics_2d_can_edit_circle_shape(context):
+    return physics_2d_enabled_on_mesh(context) and context.object.data.three_rigid_body_2d.shape.shape_type == 'circle'
+
+
 
 def get_shape_local_matrix(context, shape):
     face_orientation = context.scene.three_physics.physics_2d_orientation

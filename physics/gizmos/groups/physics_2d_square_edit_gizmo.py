@@ -13,6 +13,10 @@ from ...utils import physics_2d_can_edit_square_shape
 
 from ..widgets.physics_2d_shape_widgets import PhysicsSquareWidget, ShapeMoveWidget, ShapeRotateWidget, ShapeScaleWidget
 
+
+
+
+
 class Physics2DSquareEditGizmo(GizmoGroup):
     bl_idname = "VIEW3D_GT_physics_2d_square_edit_gizmo"
     bl_label = "Physics 2D Square Edit Gizmo"

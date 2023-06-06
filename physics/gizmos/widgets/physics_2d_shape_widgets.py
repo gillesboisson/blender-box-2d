@@ -12,7 +12,7 @@ from mathutils import Matrix, Vector
 from ....utils.plan import clamp_matrix_to_plan
 
 from ...types import PlanDirection
-from ....utils.vertices import create_circle_fill_vertices, create_circle_line_vertices, create_square_line_vertices, create_square_tris_vertices, tuple_2_to_vec_3, vec_3_to_tuple_2
+from ....utils.vertices import create_circle_tris_vertices, create_circle_line_vertices, create_square_line_vertices, create_square_tris_vertices, tuple_2_to_vec_3, vec_3_to_tuple_2
 
 from bpy_extras import view3d_utils
 
@@ -169,7 +169,7 @@ class ShapeRotateWidget(Physics2DWidget):
     
     def updateShapes(self, context, orientation: PlanDirection):
         self.shapes= list()
-        tri_vertices = create_circle_fill_vertices(radius=0.5)
+        tri_vertices = create_circle_tris_vertices(radius=0.5)
         self.shapes.append(self.new_custom_shape('TRIS',tri_vertices))
     
     def exit(self, context: Context, cancel: bool | None):
@@ -369,12 +369,85 @@ class ShapeScaleWidget(Physics2DWidget):
         tri_vertices = create_square_tris_vertices()
         self.shapes.append(self.new_custom_shape('TRIS',tri_vertices))
 
+class ShapeRadiusWidget(Physics2DWidget):
+    bl_idname = "VIEW3D_GT_three_physics_2d_shape_radius_widget"
+
+    bl_target_properties = (
+        {"id": "shape_circle_radius", "type": 'FLOAT', "array_length": 2},
+        {"id": "shape_radius", "type": 'FLOAT'},
+    )
+
+    def get_mouse_distance(self, context, event):
+        mouse_vec = Vector((event.mouse_region_x, event.mouse_region_y))
+        mouse_position_3d = view3d_utils.region_2d_to_location_3d(context.region, context.space_data.region_3d, mouse_vec, Vector((0,0,0)))
+        mouse_3d_init_position = self.get_local_position(context, mouse_position_3d)
+        mouse_shape_position = vec_3_to_tuple_2(context.scene.three_physics.physics_2d_orientation, mouse_3d_init_position)
+        return math.sqrt(mouse_shape_position[0] ** 2 + mouse_shape_position[1] ** 2)
+
+    def invoke(self, context, event):
+        self.shape_init_radius = self.target_get_value("shape_radius")
+        self.mouse_shape_distance = self.get_mouse_distance(context, event)
+
+
+        
+        return {'RUNNING_MODAL'}
+
+    def modal(self, context: Context, event: Event, tweak):
+        # refresh = False
+
+
+        if event.type == 'MOUSEMOVE':
+            
+            mouse_shape_distance = self.get_mouse_distance(context, event)
+
+            self.scale_offset = mouse_shape_distance - self.mouse_shape_distance
+
+
+
+            if 'SNAP' in tweak:
+                # delta = round(delta)
+                self.scale_offset = round(self.scale_offset)
+            if 'PRECISE' in tweak:
+                # delta /= 10.0
+                self.scale_offset = self.scale_offset / 10.0
+
+
+            
+
+            self.target_set_value("shape_radius", self.shape_init_radius + self.scale_offset)
+        
+        return {'RUNNING_MODAL'}
+
+
+    def exit(self, context: Context, cancel: bool | None):
+        if cancel:
+            self.target_set_value("shape_radius", self.shape_init_radius)
+
+
+
+
+    def updateShapes(self, context, orientation: PlanDirection):
+        self.shapes= list()
+        tri_vertices = create_square_tris_vertices()
+        self.shapes.append(self.new_custom_shape('TRIS',tri_vertices))
+
+
+class PhysicsCircleWidget (Physics2DWidget):
+    bl_idname = "VIEW3D_GT_three_physics_2d_circle_widget"
+
+    def updateShapes(self, context, orientation: PlanDirection):
+        self.shapes= list()
+        tri_vertices = create_circle_line_vertices(radius=1)
+        self.shapes.append(self.new_custom_shape('LINES',tri_vertices))
+
 
 
 classes = (
     ShapeMoveWidget,
     ShapeRotateWidget,
     PhysicsSquareWidget,
+    PhysicsCircleWidget,
+    ShapeRadiusWidget,
     ShapeScaleWidget
 )
 

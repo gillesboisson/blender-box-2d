@@ -170,7 +170,7 @@ def create_circle_line_vertices(
 
 
 
-def create_circle_fill_vertices(
+def create_circle_tris_vertices(
         radius: float = 1,
         plan_direction: PlanDirection = 'Z',
         nb_segment: int = 32,
