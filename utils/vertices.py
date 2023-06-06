@@ -125,7 +125,7 @@ def create_square_line_vertices(size=Vector((1,1)), plan_direction='Z',position=
         
     return vertices
 
-def create_polygon_line_vertices(vertices_2d, plan_direction='Z', position=Vector((0,0,0))):
+def create_polygon_line_vertices(vertices_2d, plan_direction='Z', position=Vector((0,0))):
     vertices=list()
 
     for  ind in range(len(vertices_2d)):

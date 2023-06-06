@@ -50,7 +50,7 @@ class Physics2DGizmo(GizmoGroup):
                 # if(hasattr(widget,"setup")):
                 #     widget.setup()
                 if(hasattr(widget,"updateShapes")):
-                    widget.updateShapes(context, scene_physics_orientation)
+                    widget.updateShapes()
                     
             self.last_orientation = scene_physics_orientation
 

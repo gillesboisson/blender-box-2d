@@ -17,6 +17,8 @@ def physics_2d_enabled_on_mesh(context):
 def physics_2d_can_edit_square_shape(context):
     return physics_2d_enabled_on_mesh(context) and context.object.data.three_rigid_body_2d.shape.shape_type == 'box'
 
+def physics_2d_can_edit_polygon_shape(context):
+    return physics_2d_enabled_on_mesh(context) and context.object.data.three_rigid_body_2d.shape.shape_type == 'polygon'
 
 def physics_2d_can_edit_circle_shape(context):
     return physics_2d_enabled_on_mesh(context) and context.object.data.three_rigid_body_2d.shape.shape_type == 'circle'
