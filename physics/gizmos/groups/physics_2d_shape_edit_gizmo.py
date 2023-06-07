@@ -47,19 +47,15 @@ class Physics2DEditGizmo(GizmoGroup):
             widget_alpha = 0.8
 
         return widget_color, widget_alpha
-
-
-    def setup(self, context: Context):
-        
-        
-
-
-        # blender orange widget 
+    def setup_transform_widget_colors(self, context: Context):
+          # blender orange widget 
         self.transform_widget_color = 0.8, 0.4, 0.0
         self.transform_widget_color_highlight = 1.0, 0.5, 0.2
         self.transform_widget_alpha = 0.8
         self.transform_widget_alpha_highlight = 1.0
 
+    def setup(self, context: Context):        
+        self.setup_transform_widget_colors(context)
 
         self.rotate_gizmo = self.gizmos.new(Physics2DShapeRotateWidget.bl_idname)
         self.rotate_gizmo.target_set_prop('shape_angle', context.object.data.three_rigid_body_2d.shape,"shape_angle")

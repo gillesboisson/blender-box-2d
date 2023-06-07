@@ -10,6 +10,8 @@ from .physics_2d_shape_radius_widget import Physics2DShapeRadiusWidget
 from .physics_2d_shape_rotate_widget import Physics2DShapeRotateWidget
 from .physics_2d_shape_scale_widget import Physics2DShapeScaleWidget
 from .physics_2d_polygon_widget import Physics2DPolygonWidget
+from .physics_2d_vertex_move_widget import Physics2DVertexMoveWidget
+from .physics_2d_vertex_create_widget import Physics2DVertexCreateWidget
 
 
 
@@ -22,7 +24,9 @@ classes = (
     Physics2DCircleWidget,
     Physics2DShapeRadiusWidget,
     Physics2DShapeScaleWidget,
-    Physics2DPolygonWidget
+    Physics2DPolygonWidget,
+    Physics2DVertexMoveWidget,
+    Physics2DVertexCreateWidget,
 )
 
 def register_physic_2d_shape_widgets():

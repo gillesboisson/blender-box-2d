@@ -10,6 +10,8 @@ class Physics2DShapeMoveWidget(Physics2DMoveWidget):
         {"id": "shape_position", "type": 'FLOAT', "array_length": 2},
     )
 
+    position_property_name = "shape_position"
+
     def updateShapes(self):
         self.shapes= list()
         tri_vertices = create_square_tris_vertices()

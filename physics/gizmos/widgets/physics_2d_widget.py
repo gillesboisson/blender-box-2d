@@ -1,4 +1,5 @@
-from bpy.types import Gizmo
+import typing
+from bpy.types import Context, Gizmo
 from bpy_extras import view3d_utils
 from mathutils import Vector
 from ...types import PlanDirection
@@ -12,28 +13,24 @@ class Physics2DWidget(Gizmo):
     last_orientation = None
 
     mouse_3d_offset = Vector((0,0,0))
-
-
-    # def update_orientation(self, context):
-    #     orientation = context.scene.three_physics.physics_2d_orientation
-
-    #     if self.last_orientation != orientation:
-    #         self.updateShapes()
-    #         self.last_orientation = orientation
-
-        # self.update_mat( context)
-
+    
     def draw(self, context):
-        # self.update_orientation(context)
 
         for shape in self.shapes:
             self.draw_custom_shape(shape)
 
     def draw_select(self, context, select_id):
-        # self.update_orientation(context)
-
+        # print("draw_select", select_id)
         for shape in self.shapes:
             self.draw_custom_shape(shape, select_id = select_id)
+
+    def test_select(self, context: Context, location) -> int:
+        print("test_select")
+        # for shape in self.shapes:
+        #     if(self.test_select_custom_shape(context, shape, location)):
+        #         return shape.select_id
+
+        return -1
 
     def updateShapes(self):
         return
@@ -42,11 +39,14 @@ class Physics2DWidget(Gizmo):
         self.updateShapes()
         return
 
+    def get_object_matrix_inverted(self, context, face_direction):
+        return clamp_matrix_to_plan(face_direction, context.object.matrix_world).inverted()
+        
+
     def get_local_position(self, context, position):
         face_direction = context.scene.three_physics.physics_2d_orientation
-        object_local_matrix = clamp_matrix_to_plan(face_direction, context.object.matrix_world).inverted()
-        # position_3d = vec_2_to_vec_3(orientation, position)
-
+        object_local_matrix = self.get_object_matrix_inverted(context, face_direction)
+        
         return object_local_matrix @ position
 
 

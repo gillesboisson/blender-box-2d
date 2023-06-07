@@ -9,7 +9,7 @@ from .physics_2d_polygon_edit_gizmo import Physics2DPolygonEditGizmo
 classes = (
     Physics2DSquareEditGizmo,
     Physics2DCircleEditGizmo,
-    Physics2DPolygonEditGizmo
+    Physics2DPolygonEditGizmo,
 )
 
 
