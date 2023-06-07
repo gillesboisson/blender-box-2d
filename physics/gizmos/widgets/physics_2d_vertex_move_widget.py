@@ -32,6 +32,11 @@ class Physics2DVertexMoveWidget(Physics2DMoveWidget):
         rotation_mat = Matrix.Rotation(shape_angle / 180 * pi, 4, orientation).inverted()
 
         self.move_transform_matrix = rotation_mat
+        if event.type in {"DEL"} and event.value == 'PRESS':
+            vertices = context.active_object.data.three_rigid_body_2d.shape.shape_polygon_vertices
+            vertices.remove(self.edit_ind) 
+            self.group.update_vertex_widgets(context)
+            return {'FINISHED'}
 
         return super().modal(context, event, tweak)
 

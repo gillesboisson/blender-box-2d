@@ -61,13 +61,13 @@ class ThreePhysics2DBodyShapePanel(bpy.types.Panel):
             col.prop(prop.shape,'shape_radius')
 
 
-        if prop.shape.shape_type == 'polygon':
-            col.operator("three_physics_2d.add_shape_vertex_to_polygon", text="Add vertex", icon='ADD')
-            for i in range(len(prop.shape.shape_polygon_vertices)):
-                row = col.row()
-                row.prop(prop.shape.shape_polygon_vertices[i],'pos', text="Vertex "+str(i))
-                row.operator("three_physics_2d.remove_shape_vertex", text="", icon='REMOVE').vertex_index = i
-                row.operator("three_physics_2d.edit_shape_vertex", text="", icon='HANDLE_VECTOR').vertex_index = i
+        # if prop.shape.shape_type == 'polygon':
+        #     col.operator("three_physics_2d.add_shape_vertex_to_polygon", text="Add vertex", icon='ADD')
+        #     for i in range(len(prop.shape.shape_polygon_vertices)):
+        #         row = col.row()
+        #         row.prop(prop.shape.shape_polygon_vertices[i],'pos', text="Vertex "+str(i))
+        #         row.operator("three_physics_2d.remove_shape_vertex", text="", icon='REMOVE').vertex_index = i
+        #         row.operator("three_physics_2d.edit_shape_vertex", text="", icon='HANDLE_VECTOR').vertex_index = i
 
         else:
             self.bl_parent_id = 'None'

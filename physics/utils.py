@@ -6,7 +6,7 @@ from mathutils import Matrix, Vector
 
 def physics_2d_enabled(context):
     ob = context.object
-    return ob and ob.type == "MESH" and ob.data != None and ob.data.three_rigid_body_2d != None and context.scene.three_physics.physics_mode == '2d'
+    return hasattr(context.scene,"three_physics") and ob and ob.type == "MESH" and ob.data != None and ob.data.three_rigid_body_2d != None and context.scene.three_physics.physics_2d_enabled
 
 
 

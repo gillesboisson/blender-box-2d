@@ -88,6 +88,7 @@ classes = (
 from bpy.utils import register_class, unregister_class
 
 def register_physics_3d_panels() -> None:
+    return 
     for panelClass in classes:
         register_class(panelClass)
 

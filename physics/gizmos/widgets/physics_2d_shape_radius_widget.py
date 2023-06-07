@@ -1,3 +1,4 @@
+import bpy
 from bpy.types import Context, Event
 from bpy_extras import view3d_utils
 from mathutils import Vector
@@ -62,6 +63,8 @@ class Physics2DShapeRadiusWidget(Physics2DWidget):
     def exit(self, context: Context, cancel: bool | None):
         if cancel:
             self.target_set_value("shape_radius", self.shape_init_radius)
+        else :
+            bpy.ops.ed.undo_push()
 
 
 

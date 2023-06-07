@@ -3,14 +3,16 @@ from .physics_2d_add_vertex_to_polygon_shape_operator import ThreePhysics2DAddVe
 from .physics_2d_display_polygon_vertex_operator import ThreePhysics2DDisplayPolygonVertexOperator
 from .physics_2d_edit_polygon_vertex_operator import ThreePhysics2DEditPolygonVertexOperator
 from .physics_2d_remove_vertex_to_polygon_shape_operator import ThreePhysics2DRemoveVertexToPolygonShapeOperator
+from .physics_2d_shape_move_operator import Physics2DShapeMoveOperator
 
 
 
 operatorClasses = [
-    ThreePhysics2DAddVertexToPolygonShapeOperator,
+    # ThreePhysics2DAddVertexToPolygonShapeOperator,
     ThreePhysics2DRemoveVertexToPolygonShapeOperator,
     ThreePhysics2DEditPolygonVertexOperator,
-    ThreePhysics2DDisplayPolygonVertexOperator
+    # ThreePhysics2DDisplayPolygonVertexOperator
+    # Physics2DShapeMoveOperator
 ]
 
 def register_operators():

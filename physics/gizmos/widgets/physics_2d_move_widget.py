@@ -3,11 +3,12 @@ from mathutils import Matrix
 from .physics_2d_widget import Physics2DWidget
 from ....utils.vertices import tuple_2_to_vec_3, vec_3_to_tuple_2
 
+import bpy
 
 class Physics2DMoveWidget(Physics2DWidget):
     move_transform_matrix = Matrix()
     def invoke(self, context, event):
-
+        # print(">> invoke")
         orientation = context.scene.three_physics.physics_2d_orientation
         self.shape_init_position = self.target_get_value(self.position_property_name)
         position_3d = tuple_2_to_vec_3(orientation, self.shape_init_position)
@@ -23,6 +24,8 @@ class Physics2DMoveWidget(Physics2DWidget):
     def exit(self, context: Context, cancel: bool | None):
         if cancel:
             self.target_set_value(self.position_property_name, self.shape_init_position)
+        else :
+            bpy.ops.ed.undo_push()
 
 
 

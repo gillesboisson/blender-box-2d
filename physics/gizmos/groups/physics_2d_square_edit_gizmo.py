@@ -1,6 +1,7 @@
 
 
 from math import pi
+from bpy.types import Context
 from mathutils import Matrix, Vector
 from ..widgets.physics_2d_square_widget import Physics2DSquareWidget
 
@@ -44,7 +45,6 @@ class Physics2DSquareEditGizmo(Physics2DEditGizmo):
         super().setup(context)
 
         self.scale_gizmo = self.gizmos.new(Physics2DShapeScaleWidget.bl_idname)
-        self.scale_gizmo.target_set_prop('shape_scale', context.object.data.three_rigid_body_2d.shape,"shape_box_scale")
         self.scale_gizmo.use_draw_modal = True
         self.scale_gizmo.scale_basis = 0.2
         self.scale_gizmo.color = self.transform_widget_color
@@ -53,10 +53,15 @@ class Physics2DSquareEditGizmo(Physics2DEditGizmo):
         self.scale_gizmo.alpha_highlight = self.transform_widget_alpha_highlight
 
         return 
+    
+    def refresh_gizmos_target(self, context):
+        
+        super().refresh_gizmos_target(context)
+        self.scale_gizmo.target_set_prop('shape_scale', context.object.data.three_rigid_body_2d.shape,"shape_box_scale")
+        
+
 
     
-
-
     def draw_prepare(self, context):
         shape = context.object.data.three_rigid_body_2d.shape
 

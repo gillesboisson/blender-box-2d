@@ -47,7 +47,7 @@ class Physics2DPolygonEditGizmo(Physics2DEditGizmo):
         return 
     
     
-    def update_vertex_widgets(self, context: Context):
+    def update_vertex_widgets(self, context: Context, set_prop = True):
         vertices_pos = context.object.data.three_rigid_body_2d.shape.shape_polygon_vertices
 
         len_vertices_move_widgets = len(self.vertex_move_widgets)
@@ -55,7 +55,7 @@ class Physics2DPolygonEditGizmo(Physics2DEditGizmo):
 
         v_len = max(len_vertices_move_widgets, len_vertices_pos)
 
-        for vertex_ind in range(v_len):
+        for vertex_ind in range(len_vertices_pos):
 
             if vertex_ind >= len_vertices_move_widgets:
                 vertex_create_widget =  self.gizmos.new(Physics2DVertexCreateWidget.bl_idname)
@@ -85,7 +85,8 @@ class Physics2DPolygonEditGizmo(Physics2DEditGizmo):
 
             if vertex_ind < len_vertices_pos:
                 vertex_pos = vertices_pos[vertex_ind]
-                vertex_move_widget.target_set_prop('vertex_position', vertex_pos, "pos")
+                if set_prop:
+                    vertex_move_widget.target_set_prop('vertex_position', vertex_pos, "pos")
 
                 vertex_move_widget.edit_ind = vertex_ind
 
@@ -96,18 +97,27 @@ class Physics2DPolygonEditGizmo(Physics2DEditGizmo):
                 vertex_create_widget.create_ind = vertex_ind
 
             else:
-                # vertex_move_widget.target_set_prop('vertex_position', None, "pos")
                 vertex_move_widget.hide = True
                 vertex_create_widget.hide = True
 
+        if len_vertices_move_widgets > len_vertices_pos:
+            for vertex_ind in range(len_vertices_pos, len_vertices_move_widgets):
+                vertex_move_widget = self.vertex_move_widgets[vertex_ind]
+                self.vertex_move_widgets.remove(vertex_move_widget)
+                self.gizmos.remove(vertex_move_widget)
+
+                vertex_create_widget = self.vertex_create_widgets[vertex_ind]
+                self.vertex_create_widgets.remove(vertex_create_widget)
+                self.gizmos.remove(vertex_create_widget)
         
 
 
     def refresh(self, context: Context):
-        self.update_vertex_widgets(context)
+        self.update_vertex_widgets(context, True)
+        self.refresh_gizmos_target(context)
+        self.polygon_widget.shape_polygon_vertices = context.object.data.three_rigid_body_2d.shape.shape_polygon_vertices
 
-
-
+     
     def draw_prepare(self, context):
         # print("draw_prepare")
         shape = context.object.data.three_rigid_body_2d.shape

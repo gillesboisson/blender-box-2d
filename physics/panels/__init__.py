@@ -25,9 +25,9 @@ from .physics_3d import register_physics_3d_panels, unregister_physics_3d_panels
 
 def register_panels() -> None:
     register_physics_2d_panels()
-    register_physics_3d_panels()
+    # register_physics_3d_panels()
 
 def unregister_panels() -> None:
     unregister_physics_2d_panels()
-    unregister_physics_3d_panels()
+    # unregister_physics_3d_panels()
 

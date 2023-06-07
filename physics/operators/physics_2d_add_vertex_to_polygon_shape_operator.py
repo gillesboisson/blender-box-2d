@@ -4,7 +4,7 @@ from .actions import addVertexToShape
 
 class ThreePhysics2DAddVertexToPolygonShapeOperator(bpy.types.Operator):
     """Tooltip"""
-    bl_idname = "three_physics_2d.add_shape_vertex_to_polygon"
+    bl_idname = "physics_2d.add_shape_vertex_to_polygon"
     bl_label = "Add shape vertex"
 
     @classmethod

@@ -54,12 +54,19 @@ class Physics2DEditGizmo(GizmoGroup):
         self.transform_widget_alpha = 0.8
         self.transform_widget_alpha_highlight = 1.0
 
+    
+    def refresh_gizmos_target(self, context):
+        self.rotate_gizmo.target_set_prop('shape_angle', context.object.data.three_rigid_body_2d.shape,"shape_angle")
+        self.rotate_gizmo.target_set_prop('shape_position', context.object.data.three_rigid_body_2d.shape,"shape_position")
+        self.move_gizmo.target_set_prop('shape_position', context.object.data.three_rigid_body_2d.shape,"shape_position")
+        
+        
+
     def setup(self, context: Context):        
+        
         self.setup_transform_widget_colors(context)
 
         self.rotate_gizmo = self.gizmos.new(Physics2DShapeRotateWidget.bl_idname)
-        self.rotate_gizmo.target_set_prop('shape_angle', context.object.data.three_rigid_body_2d.shape,"shape_angle")
-        self.rotate_gizmo.target_set_prop('shape_position', context.object.data.three_rigid_body_2d.shape,"shape_position")
         self.rotate_gizmo.use_draw_modal = True
         self.rotate_gizmo.scale_basis = 0.2
         self.rotate_gizmo.color = self.transform_widget_color
@@ -68,7 +75,6 @@ class Physics2DEditGizmo(GizmoGroup):
         self.rotate_gizmo.alpha_highlight = self.transform_widget_alpha_highlight
 
         self.move_gizmo = self.gizmos.new(Physics2DShapeMoveWidget.bl_idname)
-        self.move_gizmo.target_set_prop('shape_position', context.object.data.three_rigid_body_2d.shape,"shape_position")
         self.move_gizmo.use_draw_modal = True
         self.move_gizmo.scale_basis = 0.4
         self.move_gizmo.color = self.transform_widget_color
@@ -76,3 +82,7 @@ class Physics2DEditGizmo(GizmoGroup):
         self.move_gizmo.color_highlight = self.transform_widget_color_highlight
         self.move_gizmo.alpha_highlight = self.transform_widget_alpha_highlight
 
+        # self.refresh_gizmos_target(context)
+
+    def refresh(self, context: Context):
+        self.refresh_gizmos_target(context)
