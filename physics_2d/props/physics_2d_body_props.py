@@ -12,7 +12,7 @@ class Vertex2DPropertyGroup(bpy.types.PropertyGroup):
     pos: FloatVectorProperty(name="Position", size=2, default=(0,0))
     
 class RigidBody2DShapePropertyGroup(bpy.types.PropertyGroup):
-    name: StringProperty(name="Name", default="Shape")
+    # name: StringProperty(name="Name", default="Shape")
     friction: FloatProperty(name="Friction", default=0.2,min=0,max=10)
     restitution: FloatProperty(name="Restitution", default=0,min=0,max=10)
     density: FloatProperty(name="Density", default=1,min=0,max=10)

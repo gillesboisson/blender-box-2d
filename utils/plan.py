@@ -2,7 +2,7 @@
 from mathutils import Vector, Matrix
 import math
 
-from ..physics.types import PlanDirection
+from ..physics_2d.types import PlanDirection
 
 
 matFaceX = Matrix(((0,0,0,0),(1,0,0,0),(0,1,0,0),(0,0,0,1)))

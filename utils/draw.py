@@ -5,7 +5,7 @@ from gpu_extras.batch import batch_for_shader
 from .vertices import vertices_2d_to_vertices, tuple_2_to_vec_3
 from mathutils import Vector, Matrix
 from math import cos, pi, sin
-from ..physics.types import PlanDirection
+from ..physics_2d.types import PlanDirection
 
 vert_out = gpu.types.GPUStageInterfaceInfo("three_vert_interface")
 vert_out.smooth('VEC3', "pos")

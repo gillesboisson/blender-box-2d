@@ -4,7 +4,7 @@
 # from .gizmos import register_gizmos, unregister_gizmos
 # from .operator import register_operators, unregister_operators
 
-from .physics import register_physics, unregister_physics
+from .physics_2d import register_physics, unregister_physics
 
 bl_info = {
     "name" : "Three plugin",

@@ -1,7 +1,7 @@
 
 from mathutils import Vector, Matrix
 import math
-from ..physics.types import PlanDirection
+from ..physics_2d.types import PlanDirection
 
 from .plan import *
 
