@@ -9,7 +9,6 @@ classes = (
     ThreePhysics2DBodyPanel,
     ThreePhysics2DBodySettingsPanel,
     ThreePhysics2DBodyShapePanel,
-    ThreePhysics2DSceneSettingsPanel
 )
 
 from bpy.utils import register_class, unregister_class

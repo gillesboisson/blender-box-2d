@@ -15,3 +15,4 @@ class Physics2DSquareWidget(Physics2DWidget):
         self.shapes.append(self.new_custom_shape('LINES',tri_vertices))
 
 
+    

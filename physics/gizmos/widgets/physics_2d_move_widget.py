@@ -1,3 +1,4 @@
+from time import time
 from bpy.types import Context, Event
 from mathutils import Matrix
 from .physics_2d_widget import Physics2DWidget
@@ -5,7 +6,14 @@ from ....utils.vertices import tuple_2_to_vec_3, vec_3_to_tuple_2
 
 import bpy
 
+
 class Physics2DMoveWidget(Physics2DWidget):
+
+    last_click_time = 0
+
+
+
+
     move_transform_matrix = Matrix()
     def invoke(self, context, event):
         # print(">> invoke")
@@ -18,8 +26,21 @@ class Physics2DMoveWidget(Physics2DWidget):
 
         self.move_freedom = "XY"
 
-
         return {'RUNNING_MODAL'}
+    
+    
+    def is_double_clicking(self, context):
+        current_time =  time() * 1000
+        current_time_offset = current_time - self.last_click_time
+        print(current_time_offset)
+        res = False
+        if current_time_offset < 300:  # Adjust the time threshold as needed
+            print("Double click detected!")
+            res = True
+            # Your code here for handling the double click event
+        
+        self.last_click_time = current_time
+        return res
 
     def exit(self, context: Context, cancel: bool | None):
         if cancel:

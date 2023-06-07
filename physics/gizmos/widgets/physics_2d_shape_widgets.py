@@ -15,7 +15,6 @@ from .physics_2d_vertex_create_widget import Physics2DVertexCreateWidget
 
 
 
-
     
 classes = (
     Physics2DShapeMoveWidget,
