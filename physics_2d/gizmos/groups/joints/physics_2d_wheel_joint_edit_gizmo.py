@@ -138,6 +138,7 @@ class Physics2DWheelJointEditGizmo(Physics2DJointEditGizmo):
 
         cross_vec = anchor_ab_vector.cross(local_axis)
 
+        axe_error_widget = self.joint_axe_error_widgets[joint_ind]
         if(abs(cross_vec) > 0.01):
 
             # rotate pi / 2
@@ -148,10 +149,13 @@ class Physics2DWheelJointEditGizmo(Physics2DJointEditGizmo):
                 angle = -angle
 
             
+            axe_error_widget.hide = False
 
-            axe_error_widget = self.joint_axe_error_widgets[joint_ind]
+           
 
             axe_error_widget.matrix_basis = anchor_b_world_mat @ Matrix.Rotation(angle,4,"Z") @ Matrix.Scale(cross_vec,4, (1,0,0))
+        else:
+            axe_error_widget.hide = True
         
 
         

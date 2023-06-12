@@ -12,6 +12,7 @@ from ...widgets.joints.physics_2d_prismatic_anchor_move_widget import Physics2DP
 from ...widgets.joints.physics_2d_prismatic_axe_widget import Physics2DPrismaticAxeWidget
 from ...widgets.joints.physics_2d_axe_rotation_widget import Physics2DAxeRotationWidget
 from ...widgets.joints.physics_2d_axe_limit_widget import Physics2DAxeLimitWidget
+from ...widgets.joints.physics_2d_axe_widget import Physics2DAxeWidget
 
 class Physics2DPrismaticJointEditGizmo(Physics2DJointEditGizmo):
     bl_idname = "VIEW3D_GT_physics_2d_prismatic_joint_edit_gizmo"
@@ -38,6 +39,8 @@ class Physics2DPrismaticJointEditGizmo(Physics2DJointEditGizmo):
         self.joint_arrow_widgets = list()
         self.joint_axe_rotation_widgets = list()
         self.joint_axe_limit_widgets = list()
+        self.joint_axe_error_widgets = list()
+
         super().setup(context)
         
 
@@ -50,6 +53,8 @@ class Physics2DPrismaticJointEditGizmo(Physics2DJointEditGizmo):
         self.axe_rotation_widget_color = 0.8, 0.8, 0.8
         self.axe_limit_widget_name = Physics2DAxeLimitWidget.bl_idname
         self.axe_limit_widget_color = 0.8, 0.8, 0.8
+        self.axe_error_widget_name = Physics2DAxeWidget.bl_idname
+        self.axe_error_widget_color = 1.0, 0.5, 0.5
 
 
         super().refresh_widgets(context)
@@ -99,6 +104,19 @@ class Physics2DPrismaticJointEditGizmo(Physics2DJointEditGizmo):
         axe_rotation_widget.target_set_prop('axis', joint,"local_axis")
         axe_rotation_widget.target_set_prop('anchor_position', joint,"anchor_a")
 
+        if ind_joint >= len(self.joint_axe_error_widgets):
+            axe_error_widget = self.gizmos.new(self.axe_error_widget_name)
+            self.joint_axe_error_widgets.append(axe_error_widget)
+            axe_error_widget.use_draw_modal = True
+            axe_error_widget.use_draw_scale = False
+        else:
+            axe_error_widget = self.joint_axe_error_widgets[ind_joint]
+
+        axe_error_widget.color = self.axe_error_widget_color
+        axe_error_widget.color_highlight = self.axe_error_widget_color
+
+        axe_error_widget.target_set_prop('direction', joint,"local_axis")
+
         super().refresh_joint_widget(context, joint, ind_joint, len_anchors_widgets, anchor_gizmo_name_a, anchor_gizmo_name_b)
 
     def remove_joint_widgets(self, context, nb_joint, len_anchors_widgets):
@@ -111,6 +129,9 @@ class Physics2DPrismaticJointEditGizmo(Physics2DJointEditGizmo):
 
         for ind_del in range(nb_joint, len(self.joint_axe_limit_widgets)):
             self.gizmos.remove(self.joint_axe_limit_widgets[nb_joint])
+
+        for ind_del in range(nb_joint, len(self.joint_axe_error_widgets)):
+            self.gizmos.remove(self.joint_axe_error_widgets[nb_joint])
 
 
     def update_widget_matrix(
@@ -141,8 +162,33 @@ class Physics2DPrismaticJointEditGizmo(Physics2DJointEditGizmo):
         axe_rotation_widget = self.joint_axe_rotation_widgets[joint_ind]
         axe_rotation_widget.matrix_basis = anchor_a_world_mat @ arrow_mat
 
-
-        # joint limit axis start is aligned to axis vector, offset by lower limit and scale based on upper limit - lower limit
-
         axe_limit_widget = self.joint_axe_limit_widgets[joint_ind]
         axe_limit_widget.matrix_basis = anchor_a_world_mat @ arrow_mat @ Matrix.Translation((joint.lower, 0, 0)) @ Matrix.Scale(joint.upper - joint.lower, 4, Vector((1,0,0)))
+
+
+        inv_orientation_map = orientation_mat.inverted()
+
+        anchor_ab_vector = (anchor_b_world_mat @ inv_orientation_map).translation - (anchor_a_world_mat @ inv_orientation_map).translation
+        anchor_ab_vector = Vector((anchor_ab_vector.x, anchor_ab_vector.y))
+
+        cross_vec = anchor_ab_vector.cross(local_axis)
+        
+        axe_error_widget = self.joint_axe_error_widgets[joint_ind]
+        if(abs(cross_vec) > 0.01):
+
+            # rotate pi / 2
+            direction_vector = Vector((-local_axis.y, local_axis.x))
+
+            angle = acos(direction_vector.x)
+            if direction_vector.y < 0:
+                angle = -angle
+
+            
+            axe_error_widget.hide = False
+
+           
+
+            axe_error_widget.matrix_basis = anchor_b_world_mat @ Matrix.Rotation(angle,4,"Z") @ Matrix.Scale(cross_vec,4, (1,0,0))
+        else:
+            axe_error_widget.hide = True
+            
