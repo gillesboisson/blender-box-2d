@@ -12,6 +12,9 @@ class Physics2DCreateJointOperator(bpy.types.Operator):
 
     def add_joint(self, context, event):
         return None
+    
+    def set_joint_props(self, context, joint, body_a, body_b):
+        return
 
     def invoke(self, context: Context, event:Event):
 
@@ -33,10 +36,11 @@ class Physics2DCreateJointOperator(bpy.types.Operator):
         self.body_a = ob_with_bodies[0]
         self.body_b = ob_with_bodies[1]
         
-        scene_prismatic_joint = self.add_joint(context, event)
-        scene_prismatic_joint.body_a = self.body_a
-        scene_prismatic_joint.body_b = self.body_b
+        joint = self.add_joint(context, event)
+        joint.body_a = self.body_a
+        joint.body_b = self.body_b
 
+        self.set_joint_props(context, joint, self.body_a, self.body_b)
 
         return {'FINISHED'}
     
