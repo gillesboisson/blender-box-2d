@@ -155,7 +155,7 @@ class Physics2DRopeJointEditGizmo(Physics2DJointEditGizmo):
         rope_arc_widget.matrix_basis = anchor_a_world_mat @ orientation_mat @ radius_scale @ rot_mat
 
 
-        if abs(len-len_limit) < 0.05:
+        if len-len_limit < 0.05:
             limit_widget.color = 0.5, 1.0, 0.5
             limit_widget.color_highlight = limit_widget.color
             rope_arc_widget.color = limit_widget.color

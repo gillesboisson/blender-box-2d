@@ -120,18 +120,18 @@ class Physics2DDistanceJointEditGizmo(Physics2DJointEditGizmo):
 
         # len widget use same matrix as distance widget appart from using length target property
         len_limit = joint.length
-        scale_mat = Matrix.Scale(len_limit, 4, (1, 0, 0)) @ Matrix.Scale(zoom * 0.01, 4, (0, 1, 0))
+        scale_mat = Matrix.Scale(len_limit, 4, (1, 0, 0)) @ Matrix.Scale(zoom * 0.02, 4, (0, 1, 0))
         distance_mat = rot_mat @ scale_mat
         limit_widget = self.joint_limit_widgets[joint_ind]
         limit_widget.matrix_basis = anchor_a_world_mat @ distance_mat @ orientation_mat
 
         #set limit widget color based on joint limit matching length
         if abs(len-len_limit) < 0.05:
-            limit_widget.color = 0.5, 1.0, 0.5
-            limit_widget.color_highlight = limit_widget.color
+            distance_widget.color = 0.5, 1.0, 0.5
+            distance_widget.color_highlight = distance_widget.color
         else:
-            limit_widget.color = 1, 0.5, 0.5
-            limit_widget.color_highlight = limit_widget.color
+            distance_widget.color = 1, 0.5, 0.5
+            distance_widget.color_highlight = distance_widget.color
 
                         
     def get_joint_props(self, context):

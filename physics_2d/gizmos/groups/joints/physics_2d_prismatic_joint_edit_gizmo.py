@@ -182,11 +182,8 @@ class Physics2DPrismaticJointEditGizmo(Physics2DJointEditGizmo):
             angle = acos(direction_vector.x)
             if direction_vector.y < 0:
                 angle = -angle
-
             
             axe_error_widget.hide = False
-
-           
 
             axe_error_widget.matrix_basis = anchor_b_world_mat @ Matrix.Rotation(angle,4,"Z") @ Matrix.Scale(cross_vec,4, (1,0,0))
         else:
