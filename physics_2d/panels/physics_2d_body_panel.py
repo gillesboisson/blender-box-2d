@@ -1,6 +1,6 @@
 import bpy
 
-from ...utils import physics_2d_enabled
+from ..utils import physics_2d_enabled_and_mesh_selected
 
 class ThreePhysics2DBodyPanel(bpy.types.Panel):
 
@@ -12,7 +12,7 @@ class ThreePhysics2DBodyPanel(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return physics_2d_enabled(context)
+        return physics_2d_enabled_and_mesh_selected(context)
 
     def draw(self, context):
 

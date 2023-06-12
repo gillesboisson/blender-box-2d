@@ -21,19 +21,19 @@ class Physics2DVertexMoveWidget(Physics2DMoveWidget):
 
     def invoke(self, context, event):
 
-        if event.type == 'LEFTMOUSE' and event.value == 'PRESS':
+        if event.type == 'LEFTMOUSE':
             if self.is_double_clicking(context):
                 vertices = context.active_object.data.three_rigid_body_2d.shape.shape_polygon_vertices
                 vertices.remove(self.edit_ind) 
                 self.group.update_vertex_widgets(context)
                 return {'FINISHED'}
+            
 
         return super().invoke(context, event)
 
 
     def modal(self, context: Context, event: Event, tweak):
-
-
+        
         orientation = context.scene.three_physics.physics_2d_orientation
         shape_angle = context.object.data.three_rigid_body_2d.shape.shape_angle
 

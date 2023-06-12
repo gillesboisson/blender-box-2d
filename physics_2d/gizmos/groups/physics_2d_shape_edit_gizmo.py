@@ -10,13 +10,6 @@ from ..widgets.physics_2d_shape_rotate_widget import Physics2DShapeRotateWidget
 from bpy.types import (Context, GizmoGroup, Operator)
 from bpy.props import *
 
-
-from ...utils import physics_2d_can_edit_square_shape 
-
-
-
-
-
 class Physics2DEditGizmo(GizmoGroup):
 
     def get_widget_base_matrix(self, context: Context):
@@ -59,8 +52,14 @@ class Physics2DEditGizmo(GizmoGroup):
         self.rotate_gizmo.target_set_prop('shape_angle', context.object.data.three_rigid_body_2d.shape,"shape_angle")
         self.rotate_gizmo.target_set_prop('shape_position', context.object.data.three_rigid_body_2d.shape,"shape_position")
         self.move_gizmo.target_set_prop('shape_position', context.object.data.three_rigid_body_2d.shape,"shape_position")
+        self.polygon_widget.target_set_prop("body_type", context.object.data.three_rigid_body_2d, "body_type")
+        self.polygon_widget.target_set_prop("display_shape_gizmos", context.scene.three_physics.physics_2d_viewport_settings, "display_shape_gizmos")
         
+        display_shape_gizmos = context.scene.three_physics.physics_2d_viewport_settings.display_shape_gizmos
+        self.rotate_gizmo.hide = not display_shape_gizmos
+        self.move_gizmo.hide = not display_shape_gizmos
         
+
 
     def setup(self, context: Context):        
         
@@ -82,7 +81,19 @@ class Physics2DEditGizmo(GizmoGroup):
         self.move_gizmo.color_highlight = self.transform_widget_color_highlight
         self.move_gizmo.alpha_highlight = self.transform_widget_alpha_highlight
 
+        self.polygon_widget = self.gizmos.new(self.poly_gizmo_bl_name)
+        self.polygon_widget.use_draw_scale = False
+
+
         # self.refresh_gizmos_target(context)
 
     def refresh(self, context: Context):
+        
         self.refresh_gizmos_target(context)
+        (color, alpha) = self.get_shape_widget_color_alpha(context)
+        
+        self.polygon_widget.color = color
+        self.polygon_widget.alpha = alpha
+        self.polygon_widget.color_highlight  = self.polygon_widget.color
+        self.polygon_widget.alpha_highlight = self.polygon_widget.alpha
+

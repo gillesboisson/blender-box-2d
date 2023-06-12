@@ -1,6 +1,5 @@
 
 import bpy
-from ...utils import physics_2d_enabled_on_mesh
 
 
 
@@ -28,11 +27,3 @@ class ThreePhysics2DSceneSettingsPanel(bpy.types.Panel):
             # col.prop(prop,'physics_2d_display_shape')
 
 
-from bpy.utils import register_class, unregister_class
-
-def register_physics_scene_panels() -> None:
-    register_class(ThreePhysics2DSceneSettingsPanel)
-
-
-def unregister_physics_scene_panels() -> None:
-    unregister_class(ThreePhysics2DSceneSettingsPanel)

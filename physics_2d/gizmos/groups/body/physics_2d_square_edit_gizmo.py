@@ -3,16 +3,16 @@
 from math import pi
 from bpy.types import Context
 from mathutils import Matrix, Vector
-from ..widgets.physics_2d_square_widget import Physics2DSquareWidget
+from ...widgets.physics_2d_square_widget import Physics2DSquareWidget
 
-from .physics_2d_shape_edit_gizmo import Physics2DEditGizmo
+from ..physics_2d_shape_edit_gizmo import Physics2DEditGizmo
 
 from bpy.props import *
 
 
-from ...utils import physics_2d_can_edit_square_shape 
+from ....utils import display_shape, physics_2d_can_edit_square_shape 
 
-from ..widgets.physics_2d_shape_scale_widget import Physics2DShapeScaleWidget
+from ...widgets.physics_2d_shape_scale_widget import Physics2DShapeScaleWidget
 
 
 class Physics2DSquareEditGizmo(Physics2DEditGizmo):
@@ -25,23 +25,13 @@ class Physics2DSquareEditGizmo(Physics2DEditGizmo):
 
     @classmethod
     def poll(cls, context):
-        return physics_2d_can_edit_square_shape(context)
+        return physics_2d_can_edit_square_shape(context) and display_shape(context)
 
+    poly_gizmo_bl_name = Physics2DSquareWidget.bl_idname
     
         
     def setup(self, context):
 
-        (color, alpha) = self.get_shape_widget_color_alpha(context)
-
-
-        self.square_widget = self.gizmos.new(Physics2DSquareWidget.bl_idname)
-        self.square_widget.use_draw_scale = False
-        self.square_widget.color = color
-        self.square_widget.alpha = alpha
-        self.square_widget.color_highlight  = self.square_widget.color
-        self.square_widget.alpha_highlight = self.square_widget.alpha
-
-        
         super().setup(context)
 
         self.scale_gizmo = self.gizmos.new(Physics2DShapeScaleWidget.bl_idname)
@@ -52,14 +42,22 @@ class Physics2DSquareEditGizmo(Physics2DEditGizmo):
         self.scale_gizmo.color_highlight = self.transform_widget_color_highlight
         self.scale_gizmo.alpha_highlight = self.transform_widget_alpha_highlight
 
+
+
+
         return 
     
     def refresh_gizmos_target(self, context):
-        
+
         super().refresh_gizmos_target(context)
         self.scale_gizmo.target_set_prop('shape_scale', context.object.data.three_rigid_body_2d.shape,"shape_box_scale")
-        
 
+        display_shape_gizmos = context.scene.three_physics.physics_2d_viewport_settings.display_shape_gizmos
+        self.scale_gizmo.hide = not display_shape_gizmos
+
+    def refresh(self, context: Context):
+        return super().refresh(context)
+    
 
     
     def draw_prepare(self, context):
@@ -76,8 +74,7 @@ class Physics2DSquareEditGizmo(Physics2DEditGizmo):
         self.rotate_gizmo.matrix_basis =  base_mat #@ rotation_offset_mat
         self.scale_gizmo.matrix_basis =  base_mat @ scale_offset_mat
 
-
-        self.square_widget.matrix_basis =  base_mat @ scale_mat
+        self.polygon_widget.matrix_basis =  base_mat @ scale_mat
 
 
 

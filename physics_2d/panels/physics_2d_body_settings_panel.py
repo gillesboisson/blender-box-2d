@@ -1,6 +1,6 @@
 import bpy
 
-from ...utils import physics_2d_enabled_on_mesh
+from ..utils import physics_2d_enabled_on_mesh
 
 class ThreePhysics2DBodySettingsPanel(bpy.types.Panel):
 
@@ -17,6 +17,9 @@ class ThreePhysics2DBodySettingsPanel(bpy.types.Panel):
     @classmethod
     def poll(cls, context):
         return physics_2d_enabled_on_mesh(context)
+    
+
+   
 
     def draw(self, context):
 
@@ -48,3 +51,5 @@ class ThreePhysics2DBodySettingsPanel(bpy.types.Panel):
         row.prop(prop,'linear_velocity')
         col.prop(prop,'angular_velocity')
         col.prop(prop,'awake')
+
+        # self.draw_joints(layout, context)

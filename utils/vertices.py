@@ -125,6 +125,22 @@ def create_square_line_vertices(size=Vector((1,1)), plan_direction='Z',position=
         
     return vertices
 
+def create_cross_line_vertices(size=Vector((1,1)), plan_direction='Z',position=Vector((0,0))):
+    vertices=list()
+    
+    top_vert = (position.x, position.y + size.y / 2)
+    bottom_vert = (position.x, position.y - size.y / 2)
+    left_vert = (position.x - size.x / 2, position.y)
+    right_vert = (position.x + size.x / 2, position.y)
+
+    vertices.append(tuple_2_to_vec_3(plan_direction, top_vert))
+    vertices.append(tuple_2_to_vec_3(plan_direction, bottom_vert))
+    vertices.append(tuple_2_to_vec_3(plan_direction, left_vert))
+    vertices.append(tuple_2_to_vec_3(plan_direction, right_vert))
+    
+        
+    return vertices
+
 def create_polygon_line_vertices(vertices_2d, plan_direction='Z', position=Vector((0,0))):
     vertices=list()
 
@@ -196,3 +212,50 @@ def create_circle_tris_vertices(
 
         lastVertex2D = vertex2D
     return vertices
+
+
+def create_arrow_line_vertices_head(
+    length: float = 1,
+    header_size: float = Vector((0.2,0.2)),
+    offset: Vector = Vector((0,0)),
+    plan_direction: PlanDirection = 'Z',
+    ):
+
+    vertices=list()
+
+    vertices.append(tuple_2_to_vec_3(plan_direction, (offset.x + length - header_size.x, offset.y - header_size.y)))
+    vertices.append(tuple_2_to_vec_3(plan_direction, (offset.x + length, offset.y)))
+    vertices.append(tuple_2_to_vec_3(plan_direction, (offset.x + length - header_size.x, offset.y + header_size.y)))
+    vertices.append(tuple_2_to_vec_3(plan_direction, (offset.x + length, offset.y)))
+
+    return vertices
+
+def create_line_vertices(
+    lines: list[tuple[float, float]],
+    plan_direction: PlanDirection = 'Z',
+):
+    vertices=list()
+
+    for line in lines:
+        vertices.append(tuple_2_to_vec_3(plan_direction, line))
+    
+    return vertices
+
+def create_arrow_line_vertices(
+        length: float = 1,
+
+        header_size: float = Vector((0.2,0.2)),
+        offset: Vector = Vector((0,0)),
+        plan_direction: PlanDirection = 'Z',
+        
+    ):
+
+    vertices=list()
+
+    vertices.append(tuple_2_to_vec_3(plan_direction, (offset.x, offset.y)))
+    vertices.append(tuple_2_to_vec_3(plan_direction, (offset.x + length, offset.y)))
+    vertices.extend(create_arrow_line_vertices_head(length, header_size, offset, plan_direction))
+
+    return vertices
+
+    

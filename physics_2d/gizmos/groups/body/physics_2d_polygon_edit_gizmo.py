@@ -4,13 +4,13 @@ from mathutils import Matrix, Vector
 
 from bpy.props import *
 
-from ...utils import physics_2d_can_edit_polygon_shape 
-from .physics_2d_shape_edit_gizmo import Physics2DEditGizmo
+from ....utils import display_shape, physics_2d_can_edit_polygon_shape 
+from ..physics_2d_shape_edit_gizmo import Physics2DEditGizmo
 
 
-from ..widgets.physics_2d_polygon_widget import Physics2DPolygonWidget
-from ..widgets.physics_2d_vertex_move_widget import Physics2DVertexMoveWidget
-from ..widgets.physics_2d_vertex_create_widget import Physics2DVertexCreateWidget
+from ...widgets.physics_2d_polygon_widget import Physics2DPolygonWidget
+from ...widgets.physics_2d_vertex_move_widget import Physics2DVertexMoveWidget
+from ...widgets.physics_2d_vertex_create_widget import Physics2DVertexCreateWidget
 
 
 class Physics2DPolygonEditGizmo(Physics2DEditGizmo):
@@ -19,23 +19,15 @@ class Physics2DPolygonEditGizmo(Physics2DEditGizmo):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'WINDOW'
     bl_options = {'3D', 'PERSISTENT'}
-
+    
+    poly_gizmo_bl_name = Physics2DPolygonWidget.bl_idname
 
     @classmethod
     def poll(cls, context):
-        return physics_2d_can_edit_polygon_shape(context)
-
+        return physics_2d_can_edit_polygon_shape(context) and display_shape(context)
+    
 
     def setup(self, context):
-        (color, alpha) = self.get_shape_widget_color_alpha(context)
-
-        self.polygon_widget = self.gizmos.new(Physics2DPolygonWidget.bl_idname)
-        self.polygon_widget.use_draw_scale = False
-        self.polygon_widget.color = color
-        self.polygon_widget.alpha = alpha
-        self.polygon_widget.color_highlight  = self.polygon_widget.color
-        self.polygon_widget.alpha_highlight = self.polygon_widget.alpha
-        self.polygon_widget.shape_polygon_vertices = context.object.data.three_rigid_body_2d.shape.shape_polygon_vertices
 
         super().setup(context)
 
@@ -52,8 +44,10 @@ class Physics2DPolygonEditGizmo(Physics2DEditGizmo):
 
         len_vertices_move_widgets = len(self.vertex_move_widgets)
         len_vertices_pos = len(vertices_pos)
+        display_shape_gizmos = context.scene.three_physics.physics_2d_viewport_settings.display_shape_gizmos
 
-        v_len = max(len_vertices_move_widgets, len_vertices_pos)
+        if not display_shape_gizmos:
+            len_vertices_pos = 0 # hide all widgets
 
         for vertex_ind in range(len_vertices_pos):
 
@@ -100,22 +94,30 @@ class Physics2DPolygonEditGizmo(Physics2DEditGizmo):
                 vertex_move_widget.hide = True
                 vertex_create_widget.hide = True
 
+        len_vertices_move_widgets = len(self.vertex_move_widgets)
+
         if len_vertices_move_widgets > len_vertices_pos:
             for vertex_ind in range(len_vertices_pos, len_vertices_move_widgets):
-                vertex_move_widget = self.vertex_move_widgets[vertex_ind]
+                vertex_move_widget = self.vertex_move_widgets[len_vertices_pos]
                 self.vertex_move_widgets.remove(vertex_move_widget)
                 self.gizmos.remove(vertex_move_widget)
 
-                vertex_create_widget = self.vertex_create_widgets[vertex_ind]
+                vertex_create_widget = self.vertex_create_widgets[len_vertices_pos]
                 self.vertex_create_widgets.remove(vertex_create_widget)
                 self.gizmos.remove(vertex_create_widget)
         
 
+    def refresh_gizmos_target(self, context):
+        self.polygon_widget.target_set_prop("shape_polygon_vertices", context.object.data.three_rigid_body_2d.shape, "shape_polygon_vertices")
+        return super().refresh_gizmos_target(context)
+    
 
     def refresh(self, context: Context):
+        # print("refresh")
         self.update_vertex_widgets(context, True)
-        self.refresh_gizmos_target(context)
+        # self.refresh_gizmos_target(context)
         self.polygon_widget.shape_polygon_vertices = context.object.data.three_rigid_body_2d.shape.shape_polygon_vertices
+        super().refresh(context)
 
      
     def draw_prepare(self, context):

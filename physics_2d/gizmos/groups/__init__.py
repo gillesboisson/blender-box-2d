@@ -1,25 +1,13 @@
 
-import bpy
-from .physics_2d_square_edit_gizmo import Physics2DSquareEditGizmo
-from .physics_2d_circle_edit_gizmo import Physics2DCircleEditGizmo
-from .physics_2d_polygon_edit_gizmo import Physics2DPolygonEditGizmo
 
-
-
-classes = (
-    Physics2DSquareEditGizmo,
-    Physics2DCircleEditGizmo,
-    Physics2DPolygonEditGizmo,
-)
-
+from .body import register_body_groups, unregister_body_groups
+from .joints import register_joints_groups, unregister_joints_groups
 
 def register_groups():
-    for cls in classes:
-        bpy.utils.register_class(cls)
+    register_body_groups()
+    register_joints_groups()
 
 def unregister_groups():
-    reverted_classes = reversed(classes)
-    for cls in reverted_classes:
-        bpy.utils.unregister_class(cls)
-
+    unregister_body_groups()
+    unregister_joints_groups()
     
