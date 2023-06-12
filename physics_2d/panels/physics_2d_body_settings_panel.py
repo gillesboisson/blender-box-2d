@@ -29,27 +29,22 @@ class ThreePhysics2DBodySettingsPanel(bpy.types.Panel):
         prop = obj.three_rigid_body_2d
 
         layout = self.layout
+        layout.use_property_split = True
+        layout.use_property_decorate = False  # No animation.
 
-        layout.separator(factor=0.5)
         col = layout.column()
-        col.prop(prop,'mass')
+                
         col.prop(prop,'body_type')
         col.prop(prop,'bullet')
-
-        col.separator(factor=2)
-
         col.prop(prop,'fixed_rotation')
         col.prop(prop,'sleeping_allowed')
+        col.prop(prop,'awake')
         col.prop(prop,'linear_damping')
-        col.prop(prop,'angular_damping')
-
-        col.separator(factor=2)
-
+        col.prop(prop,'angular_damping' )
         col.prop(prop,'mass')
         col.prop(prop,'active')
-        row = col.row()
-        row.prop(prop,'linear_velocity')
+        col.prop(prop,'linear_velocity')
         col.prop(prop,'angular_velocity')
-        col.prop(prop,'awake')
+        
 
         # self.draw_joints(layout, context)

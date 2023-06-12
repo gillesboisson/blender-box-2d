@@ -66,7 +66,7 @@ class Physics2DWheelsJointPropertyGroup(bpy.types.PropertyGroup):
     damping_ratio: FloatProperty(name="Damping ratio", default=0)
 
 class Physics2DRopeJointPropertyGroup(bpy.types.PropertyGroup):
-    name: StringProperty(name="Name", default="Wheel joint")
+    name: StringProperty(name="Name", default="Rope joint")
     body_a: PointerProperty(name="Body A", type=bpy.types.Object, poll=object_can_have_joint)
     body_b: PointerProperty(name="Body B", type=bpy.types.Object, poll=object_can_have_joint)
     anchor_a: FloatVectorProperty(name="Anchor A", default=(0,0), size=2)

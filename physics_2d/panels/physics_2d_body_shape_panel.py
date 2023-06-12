@@ -21,15 +21,13 @@ class ThreePhysics2DBodyShapePanel(bpy.types.Panel):
         obj = context.active_object.data
         prop = obj.three_rigid_body_2d
         layout = self.layout
-        col = layout.column(align=True)
+        
         layout.use_property_split = True
-        layout.use_property_decorate = False
+        layout.use_property_decorate = False  # No animation.
 
+        col = layout.column(align=True)
 
-
-        row = col.row()
-
-        row.prop(prop.shape,'shape_position')
+        col.prop(prop.shape,'shape_position')
         col.prop(prop.shape,'shape_angle')
         col.separator(factor=2)
         col.prop(prop.shape,'friction')
@@ -38,7 +36,6 @@ class ThreePhysics2DBodyShapePanel(bpy.types.Panel):
         col.prop(prop.shape,'sensor')
         col.separator(factor=2)
 
-        row = col.row(align=True)
         col.prop(prop.shape,'filter_category_bits')
         col.prop(prop.shape,'filter_mask_bits')
         col.prop(prop.shape,'filter_group_index')
@@ -48,8 +45,7 @@ class ThreePhysics2DBodyShapePanel(bpy.types.Panel):
         col.prop(prop.shape,'shape_type')
         # box = col.box()
         if prop.shape.shape_type == 'box':
-            row = col.row()
-            row.prop(prop.shape,'shape_box_scale')
+            col.prop(prop.shape,'shape_box_scale')
 
         if prop.shape.shape_type == 'circle':
             col.prop(prop.shape,'shape_radius')
@@ -57,13 +53,15 @@ class ThreePhysics2DBodyShapePanel(bpy.types.Panel):
 
         if prop.shape.shape_type == 'polygon':
             
-            # col.operator("physics_2d.physics_create_shape_poly", icon='ADD')
             
             for i in range(len(prop.shape.shape_polygon_vertices)):
+                
+                layout.use_property_split = False
+                col = layout.column()
                 row = col.row()
+                
+                
                 row.prop(prop.shape.shape_polygon_vertices[i],'pos', text="Vertex "+str(i))
-                # row.operator("three_physics_2d.remove_shape_vertex", text="", icon='REMOVE').vertex_index = i
-                # row.operator("three_physics_2d.edit_shape_vertex", text="", icon='HANDLE_VECTOR').vertex_index = i
 
         else:
             self.bl_parent_id = 'None'

@@ -16,6 +16,9 @@ class ThreePhysics2DSceneSettingsPanel(bpy.types.Panel):
         scene = context.scene
         prop = scene.three_physics
         layout = self.layout    
+        layout.use_property_split = True
+        layout.use_property_decorate = False  # No animation.
+        
         layout.separator(factor=0.5)
         col = layout.column()
         col.prop(prop,'physics_2d_enabled')
