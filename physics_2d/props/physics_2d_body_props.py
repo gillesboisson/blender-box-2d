@@ -8,6 +8,7 @@ from ..types import Physics2DBodyShapeType, PhysicsBodyType
 
 rigid_body_2d_property_name = 'three_rigid_body_2d'
 
+
 class Vertex2DPropertyGroup(bpy.types.PropertyGroup):
     pos: FloatVectorProperty(name="Position", size=2, default=(0,0))
     

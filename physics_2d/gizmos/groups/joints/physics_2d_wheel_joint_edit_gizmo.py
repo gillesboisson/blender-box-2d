@@ -76,6 +76,7 @@ class Physics2DWheelJointEditGizmo(Physics2DJointEditGizmo):
 
         axe_rotation_widget.target_set_prop('axis', joint,"local_axis")
         axe_rotation_widget.target_set_prop('anchor_position', joint,"anchor_a")
+        axe_rotation_widget.hide = not self.display_joint_gizmos
 
         if ind_joint >= len(self.joint_axe_error_widgets):
             axe_error_widget = self.gizmos.new(self.axe_error_widget_name)
@@ -95,13 +96,20 @@ class Physics2DWheelJointEditGizmo(Physics2DJointEditGizmo):
     def remove_joint_widgets(self, context, nb_joint, len_anchors_widgets):
         super().remove_joint_widgets(context, nb_joint, len_anchors_widgets)
         for ind_del in range(nb_joint, len(self.joint_arrow_widgets)):
-            self.gizmos.remove(self.joint_arrow_widgets[nb_joint])
+            gz = self.joint_arrow_widgets[nb_joint]
+            self.gizmos.remove(gz)
+            self.joint_arrow_widgets.remove(gz)
+
         
         for ind_del in range(nb_joint, len(self.joint_axe_rotation_widgets)):
-            self.gizmos.remove(self.joint_axe_rotation_widgets[nb_joint])
+            gz = self.joint_axe_rotation_widgets[nb_joint]
+            self.gizmos.remove(gz)
+            self.joint_axe_rotation_widgets.remove(gz)
 
         for ind_del in range(nb_joint, len(self.joint_axe_error_widgets)):
-            self.gizmos.remove(self.joint_axe_error_widgets[nb_joint])
+            gz = self.joint_axe_error_widgets[nb_joint]
+            self.gizmos.remove(gz)
+            self.joint_axe_error_widgets.remove(gz)
 
 
     def update_widget_matrix(

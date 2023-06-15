@@ -130,16 +130,24 @@ class Physics2DPrismaticJointEditGizmo(Physics2DJointEditGizmo):
     def remove_joint_widgets(self, context, nb_joint, len_anchors_widgets):
         super().remove_joint_widgets(context, nb_joint, len_anchors_widgets)
         for ind_del in range(nb_joint, len(self.joint_arrow_widgets)):
-            self.gizmos.remove(self.joint_arrow_widgets[nb_joint])
+            gz = self.joint_arrow_widgets[nb_joint]
+            self.gizmos.remove(gz)
+            self.joint_arrow_widgets.remove(gz)
         
         for ind_del in range(nb_joint, len(self.joint_axe_rotation_widgets)):
-            self.gizmos.remove(self.joint_axe_rotation_widgets[nb_joint])
+            gz = self.joint_axe_rotation_widgets[nb_joint]
+            self.gizmos.remove(gz)
+            self.joint_axe_rotation_widgets.remove(gz)
 
         for ind_del in range(nb_joint, len(self.joint_axe_limit_widgets)):
-            self.gizmos.remove(self.joint_axe_limit_widgets[nb_joint])
+            gz = self.joint_axe_limit_widgets[nb_joint]
+            self.gizmos.remove(gz)
+            self.joint_axe_limit_widgets.remove(gz)
 
         for ind_del in range(nb_joint, len(self.joint_axe_error_widgets)):
-            self.gizmos.remove(self.joint_axe_error_widgets[nb_joint])
+            gz = self.joint_axe_error_widgets[nb_joint]
+            self.gizmos.remove(gz)
+            self.joint_axe_error_widgets.remove(gz)
 
 
     def update_widget_matrix(

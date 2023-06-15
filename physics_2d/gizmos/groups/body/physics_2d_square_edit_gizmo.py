@@ -49,6 +49,7 @@ class Physics2DSquareEditGizmo(Physics2DShapeEditGizmo):
         
 
         scale_widget.target_set_prop('shape_scale', shape,"shape_box_scale")
+        scale_widget.target_set_prop('shape_position', shape,"shape_position")
     
 
     def remove_shape_widget(self, ind_shape):

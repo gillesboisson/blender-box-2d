@@ -81,6 +81,7 @@ class Physics2DShapeEditGizmo(GizmoGroup):
             polygon_widget = self.gizmos.new(self.poly_gizmo_bl_name)
             self.polygon_widgets.append(polygon_widget)
             polygon_widget.use_draw_scale = False
+            polygon_widget.hide = True
         else:
             polygon_widget = self.polygon_widgets[ind]
 

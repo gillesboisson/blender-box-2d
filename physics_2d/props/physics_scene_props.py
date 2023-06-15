@@ -7,6 +7,7 @@ from ..types import PlanDirection
 
 physics_property_name = 'three_physics'
 
+# from ..draw_handlers import update_shape_draw
 
 # def update_func_shape_visibility(self, context):
 #     print(self.physics_2d_display_shape)

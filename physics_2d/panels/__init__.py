@@ -6,6 +6,7 @@ from .physics_2d_scene_settings_panel import ThreePhysics2DSceneSettingsPanel
 
 from .physics_2d_joint_panels import ThreePhysics2DSceneJointPanel, ThreePhysics2DObjectJointPanel
 from .physics_2d_viewport_settings import ThreePhysics2DViewportSettingsPanel
+from .physics_2d_tools_panel import ThreePhysics2DToolsPanel
         
 
 classes = (
@@ -16,6 +17,7 @@ classes = (
     ThreePhysics2DViewportSettingsPanel,
     ThreePhysics2DSceneJointPanel,
     ThreePhysics2DObjectJointPanel,
+    ThreePhysics2DToolsPanel
 
 )
 

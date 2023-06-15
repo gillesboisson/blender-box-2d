@@ -63,7 +63,10 @@ class Physics2DJointEditGizmo(GizmoGroup):
     def remove_joint_widgets(self, context: Context, nb_joint, len_anchors_widgets):
         nb_anchors = nb_joint * 2
         for ind_del in range(nb_anchors, len_anchors_widgets):
-            self.gizmos.remove(self.anchors_widgets[nb_anchors])
+            gz = self.anchors_widgets[nb_anchors]
+            self.gizmos.remove(gz)
+            self.anchors_widgets.remove(gz)
+            
 
     def refresh_widgets(self, context: Context):
         self.display_joint_gizmos = context.scene.three_physics.physics_2d_viewport_settings.display_joint_gizmos
@@ -73,20 +76,18 @@ class Physics2DJointEditGizmo(GizmoGroup):
         ind_joint = 0
 
         joints = self.get_joint_props(context)
-        ob = context.object
-
+        # ob = context.object
+        duplicates = set()
         self.joints.clear()
-
         anchor_gizmo_name_a = self.anchor_gizmo_name_a()
         anchor_gizmo_name_b = self.anchor_gizmo_name_b()
         for joint in joints:
-
-            if (joint.body_a is not None and joint.body_b is not None and (ob == joint.body_a or ob == joint.body_b)) and self.joints.count(joint) == 0:
-
-                self.joints.append(joint)
-                self.refresh_joint_widget(context, joint, ind_joint, len_anchors_widgets, anchor_gizmo_name_a, anchor_gizmo_name_b)
-                ind_joint+=1
-
+            for ob in context.selected_objects:
+                if (joint not in duplicates and joint.body_a is not None and joint.body_b is not None and (ob == joint.body_a or ob == joint.body_b)) and self.joints.count(joint) == 0:
+                    duplicates.add(joint)
+                    self.joints.append(joint)
+                    self.refresh_joint_widget(context, joint, ind_joint, len_anchors_widgets, anchor_gizmo_name_a, anchor_gizmo_name_b)
+                    ind_joint+=1
         self.remove_joint_widgets(context, ind_joint, len_anchors_widgets)
 
     def refresh(self, context: Context):

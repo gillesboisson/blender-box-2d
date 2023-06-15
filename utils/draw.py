@@ -79,6 +79,18 @@ def draw_polyline_2D(
     batch.draw(shader)
 
 
+def draw_lines(
+        coords: list[tuple[float,float, float]],
+        color: tuple[float, float, float, float],
+        modelMat: Matrix,
+    ):
+    vp = bpy.context.region_data.perspective_matrix
+    set_shader_uniforms(vp, modelMat, color)
+
+
+    batch = batch_for_shader(shader, 'LINES', {"position": coords})
+    batch.draw(shader)
+
 
 
 # square_geom = (

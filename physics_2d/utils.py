@@ -16,11 +16,11 @@ def physics_2d_can_edit_revolute_joint(context):
     
     joints = context.scene.three_physics.physics_2d_joints.revolute_joints
 
-    for joint in joints:
-        if joint.body_a == context.object or joint.body_b == context.object:
-            return True
+    # for joint in joints:
+    #     if joint.body_a == context.object or joint.body_b == context.object:
+    #         return True
         
-    return False
+    return True
 
 def physics_2d_can_edit_prismatic_joint(context):
     if not physics_2d_enabled_on_mesh(context):
@@ -28,45 +28,48 @@ def physics_2d_can_edit_prismatic_joint(context):
     
     joints = context.scene.three_physics.physics_2d_joints.prismatic_joints
 
-    for joint in joints:
-        if joint.body_a == context.object or joint.body_b == context.object:
-            return True
+    # for joint in joints:
+    #     if joint.body_a == context.object or joint.body_b == context.object:
+    #         return True
         
-    return False
+    return True
 
 def physics_2d_can_edit_distance_joint(context):
     if not physics_2d_enabled_on_mesh(context):
         return False
     
-    joints = context.scene.three_physics.physics_2d_joints.distance_joints
+    # joints = context.scene.three_physics.physics_2d_joints.distance_joints
 
-    for joint in joints:
-        if joint.body_a == context.object or joint.body_b == context.object:
-            return True
+    # for joint in joints:
+    #     if joint.body_a == context.object or joint.body_b == context.object:
+    #         return True
+    return True
         
     return False
 def physics_2d_can_edit_wheel_joint(context):
     if not physics_2d_enabled_on_mesh(context):
         return False
     
-    joints = context.scene.three_physics.physics_2d_joints.wheel_joints
+    # joints = context.scene.three_physics.physics_2d_joints.wheel_joints
 
-    for joint in joints:
-        if joint.body_a == context.object or joint.body_b == context.object:
-            return True
+    # for joint in joints:
+    #     if joint.body_a == context.object or joint.body_b == context.object:
+    #         return True
+
+    return True
         
     return False
 def physics_2d_can_edit_rope_joint(context):
     if not physics_2d_enabled_on_mesh(context):
         return False
     
-    joints = context.scene.three_physics.physics_2d_joints.rope_joints
+    # joints = context.scene.three_physics.physics_2d_joints.rope_joints
 
-    for joint in joints:
-        if joint.body_a == context.object or joint.body_b == context.object:
-            return True
+    # for joint in joints:
+    #     if joint.body_a == context.object or joint.body_b == context.object:
+    #         return True
         
-    return False
+    return True
 
 
 def physics_2d_enabled_and_mesh_selected(context):

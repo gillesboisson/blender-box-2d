@@ -67,17 +67,23 @@ class Physics2DDistanceJointEditGizmo(Physics2DJointEditGizmo):
 
 
 
+
         super().refresh_joint_widget(context, joint, ind_joint, len_anchors_widgets, anchor_gizmo_name_a, anchor_gizmo_name_b)
 
     def remove_joint_widgets(self, context, nb_joint, len_widgets):
         super().remove_joint_widgets(context, nb_joint, len_widgets)
         len_widgets = len(self.joint_distance_widgets)
         for ind_del in range(nb_joint, len_widgets):
-            self.gizmos.remove(self.joint_distance_widgets[nb_joint])
+            gz = self.joint_distance_widgets[nb_joint]
+            self.gizmos.remove(gz)
+            self.joint_distance_widgets.remove(gz)
+            
 
         len_widgets = len(self.joint_limit_widgets)
         for ind_del in range(nb_joint, len_widgets):
-            self.gizmos.remove(self.joint_limit_widgets[nb_joint])
+            gz = self.joint_limit_widgets[nb_joint]
+            self.gizmos.remove(gz)
+            self.joint_limit_widgets.remove(gz)
 
 
 

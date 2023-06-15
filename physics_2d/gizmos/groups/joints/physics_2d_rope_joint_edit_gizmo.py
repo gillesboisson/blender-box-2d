@@ -90,15 +90,22 @@ class Physics2DRopeJointEditGizmo(Physics2DJointEditGizmo):
         super().remove_joint_widgets(context, nb_joint, len_widgets)
         len_widgets = len(self.joint_rope_widgets)
         for ind_del in range(nb_joint, len_widgets):
-            self.gizmos.remove(self.joint_rope_widgets[nb_joint])
+            gz = self.joint_rope_widgets[nb_joint]
+            self.gizmos.remove(gz)
+            self.joint_rope_widgets.remove(gz)
 
         len_widgets = len(self.joint_limit_widgets)
         for ind_del in range(nb_joint, len_widgets):
-            self.gizmos.remove(self.joint_limit_widgets[nb_joint])
+            gz = self.joint_limit_widgets[nb_joint]
+            self.gizmos.remove(gz)
+            self.joint_limit_widgets.remove(gz)
+            
 
         len_widgets = len(self.joint_rope_arc_widgets)
         for ind_del in range(nb_joint, len_widgets):
-            self.gizmos.remove(self.joint_rope_arc_widgets[nb_joint])
+            gz = self.joint_rope_arc_widgets[nb_joint]
+            self.gizmos.remove(gz)
+            self.joint_rope_arc_widgets.remove(gz)
 
 
 
