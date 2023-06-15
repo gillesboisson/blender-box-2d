@@ -78,14 +78,14 @@ def physics_2d_enabled_on_mesh(context):
     ob = context.object
     return physics_2d_enabled(context) and ob and ob.type == "MESH" and ob.data != None and ob.data.three_rigid_body_2d != None and ob.data.three_rigid_body_2d.enabled == True
 
-def physics_2d_can_edit_square_shape(context):
-    return physics_2d_enabled_on_mesh(context) and context.object.data.three_rigid_body_2d.shape.shape_type == 'box'
+# def physics_2d_can_edit_square_shape(context):
+#     return physics_2d_enabled_on_mesh(context) and context.object.data.three_rigid_body_2d.shape.shape_type == 'box'
 
-def physics_2d_can_edit_polygon_shape(context):
-    return physics_2d_enabled_on_mesh(context) and context.object.data.three_rigid_body_2d.shape.shape_type == 'polygon'
+# def physics_2d_can_edit_polygon_shape(context):
+#     return physics_2d_enabled_on_mesh(context) and context.object.data.three_rigid_body_2d.shape.shape_type == 'polygon'
 
-def physics_2d_can_edit_circle_shape(context):
-    return physics_2d_enabled_on_mesh(context) and context.object.data.three_rigid_body_2d.shape.shape_type == 'circle'
+# def physics_2d_can_edit_circle_shape(context):
+#     return physics_2d_enabled_on_mesh(context) and context.object.data.three_rigid_body_2d.shape.shape_type == 'circle'
 
 def display_shape(context):
     return context.scene.three_physics.physics_2d_viewport_settings.display_shape

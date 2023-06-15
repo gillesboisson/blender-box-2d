@@ -9,9 +9,11 @@ class Physics2DJointEditGizmo(GizmoGroup):
     def setup(self, context):
         self.anchors_widgets = list()
         self.joints = list()
-
-        self.anchor_a_color = 0.8, 0.8, 0.8
-        self.anchor_b_color = 0.8, 0.8, 0.8
+        self.gizmo_color = 0.2, 0.5, 0.7
+        self.joint_color = 0.7, 0.9, 1.0
+        self.anchor_a_color = self.gizmo_color
+        self.anchor_b_color = self.gizmo_color
+        
 
         self.refresh_widgets(context)
 
@@ -39,6 +41,7 @@ class Physics2DJointEditGizmo(GizmoGroup):
         anchor_a_widget.color_highlight = self.anchor_a_color
         anchor_a_widget.target_set_prop('anchor_position', joint,"anchor_a")
         anchor_a_widget.target_set_prop('display_joint_gizmo', context.scene.three_physics.physics_2d_viewport_settings,"display_joint_gizmos")
+        anchor_a_widget.hide = not self.display_joint_gizmos
 
         ind_anchor += 1
         if ind_anchor >= len_anchors_widgets:
@@ -54,6 +57,8 @@ class Physics2DJointEditGizmo(GizmoGroup):
         anchor_b_widget.color_highlight = self.anchor_b_color
         anchor_b_widget.target_set_prop('anchor_position', joint,"anchor_b")
         anchor_b_widget.target_set_prop('display_joint_gizmo', context.scene.three_physics.physics_2d_viewport_settings,"display_joint_gizmos")
+        anchor_b_widget.hide = not self.display_joint_gizmos
+
 
     def remove_joint_widgets(self, context: Context, nb_joint, len_anchors_widgets):
         nb_anchors = nb_joint * 2
@@ -61,6 +66,9 @@ class Physics2DJointEditGizmo(GizmoGroup):
             self.gizmos.remove(self.anchors_widgets[nb_anchors])
 
     def refresh_widgets(self, context: Context):
+        self.display_joint_gizmos = context.scene.three_physics.physics_2d_viewport_settings.display_joint_gizmos
+
+
         len_anchors_widgets = len(self.anchors_widgets)
         ind_joint = 0
 

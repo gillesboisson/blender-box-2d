@@ -208,7 +208,7 @@ class ThreePhysics2DSceneJointPanel(bpy.types.Panel):
 
 class ThreePhysics2DObjectJointPanel(bpy.types.Panel):
     bl_idname = 'VIEW3D_PT_three_physics_2D_object_joint_panel'
-    bl_label = 'joint'
+    bl_label = 'Joints'
     bl_parent_id = 'VIEW3D_PT_three_physics_2D_body_panel'
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'

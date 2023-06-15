@@ -11,6 +11,7 @@ class Physics2DSquareWidget(Physics2DWidget):
     bl_target_properties = (
         {"id": "body_type", "type": 'ENUM'},
         {"id": "display_shape_gizmos", "type": 'BOOLEAN'},
+        
     )
 
     def updateShapes(self):

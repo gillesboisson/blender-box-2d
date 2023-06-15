@@ -8,7 +8,7 @@ class Physics2DPolygonWidget(Physics2DWidget):
     bl_idname = "VIEW3D_GT_three_physics_2d_polygon_widget"
 
     bl_target_properties = (
-        {"id": "shape_polygon_vertices", "type": 'COLLECTION'},
+        # {"id": "shape_polygon_vertices", "type": 'COLLECTION'},
         {"id": "body_type", "type": 'ENUM'},
         {"id": "display_shape_gizmos", "type": 'BOOLEAN'},
 

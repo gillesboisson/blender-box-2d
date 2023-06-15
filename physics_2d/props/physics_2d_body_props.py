@@ -41,7 +41,7 @@ class RigidBody2DPropertyGroup(bpy.types.PropertyGroup):
     linear_velocity: FloatVectorProperty(name="Linear velocity", size=2, default=(0,0))
     angular_velocity: FloatProperty(name="Angular velocity", default=0)
     awake: BoolProperty(name="Awake",description="Awake", default=True)
-    shape: PointerProperty(type=RigidBody2DShapePropertyGroup)
+    shapes: CollectionProperty(type=RigidBody2DShapePropertyGroup)
 
 
 def register_physics_2d_body_props():

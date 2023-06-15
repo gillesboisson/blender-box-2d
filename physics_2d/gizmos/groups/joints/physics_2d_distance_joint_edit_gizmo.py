@@ -18,7 +18,7 @@ class Physics2DDistanceJointEditGizmo(Physics2DJointEditGizmo):
 
     @classmethod
     def poll(cls, context):
-        res = physics_2d_can_edit_distance_joint(context) and display_joint_gizmos(context) and display_joint(context)
+        res = physics_2d_can_edit_distance_joint(context) and display_joint(context)
         return res
 
 
@@ -39,11 +39,12 @@ class Physics2DDistanceJointEditGizmo(Physics2DJointEditGizmo):
         else:
             distance_widget = self.joint_distance_widgets[ind_joint]
 
-        distance_widget.color = self.anchor_a_color
-        distance_widget.color_highlight = self.anchor_a_color
+        distance_widget.color = self.joint_color
+        distance_widget.color_highlight = self.joint_color
 
         distance_widget.target_set_prop('anchor_a', joint,"anchor_a")
         distance_widget.target_set_prop('anchor_b', joint,"anchor_b")
+        distance_widget.target_set_prop('display_joint_gizmos',context.scene.three_physics.physics_2d_viewport_settings,'display_joint_gizmos')
 
 
         
@@ -56,8 +57,8 @@ class Physics2DDistanceJointEditGizmo(Physics2DJointEditGizmo):
         else:
             limit_widget = self.joint_limit_widgets[ind_joint]
 
-        limit_widget.color = self.anchor_a_color
-        limit_widget.color_highlight = self.anchor_a_color
+        limit_widget.color = self.joint_color
+        limit_widget.color_highlight = self.joint_color
 
         limit_widget.target_set_prop('anchor_a', joint,"anchor_a")
         limit_widget.target_set_prop('anchor_b', joint,"anchor_b")

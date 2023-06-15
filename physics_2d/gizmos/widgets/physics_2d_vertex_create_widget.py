@@ -20,12 +20,12 @@ class Physics2DVertexCreateWidget(Physics2DWidget):
 
     def invoke(self, context, event):
         print('invoke')
-        vertices = context.active_object.data.three_rigid_body_2d.shape.shape_polygon_vertices
+        vertices = self.shape.shape_polygon_vertices
         ind = len(vertices)
         p = vertices.add()
         p.pos = (self.create_position[0],self.create_position[1])
         vertices.move(ind, self.create_ind + 1)
-        self.group.update_vertex_widgets(context)
+        self.group.refresh_shapes_widgets(context)
         return {'FINISHED'}
 
     def select_refresh(self):

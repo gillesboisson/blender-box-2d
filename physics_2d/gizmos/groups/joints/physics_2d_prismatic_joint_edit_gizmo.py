@@ -24,7 +24,7 @@ class Physics2DPrismaticJointEditGizmo(Physics2DJointEditGizmo):
 
     @classmethod
     def poll(cls, context):
-        res = physics_2d_can_edit_prismatic_joint(context) and display_joint_gizmos(context) and display_joint(context)
+        res = physics_2d_can_edit_prismatic_joint(context) and display_joint(context)
         return res
 
     def get_joint_props(self, context):
@@ -70,10 +70,13 @@ class Physics2DPrismaticJointEditGizmo(Physics2DJointEditGizmo):
         else:
             arrow_widget = self.joint_arrow_widgets[ind_joint]
         
-        arrow_widget.color = self.arrow_widget_color
-        arrow_widget.color_highlight = self.arrow_widget_color
+        arrow_widget.color = self.joint_color
+        arrow_widget.color_highlight = self.joint_color
 
         arrow_widget.target_set_prop('direction', joint,"local_axis")
+        arrow_widget.target_set_prop('display_joint_gizmos',context.scene.three_physics.physics_2d_viewport_settings,'display_joint_gizmos')
+        arrow_widget.target_set_prop('enable_limit',joint,'enable_limit')
+        
         arrow_widget.hide = joint.enable_limit
 
         if ind_joint >= len(self.joint_axe_limit_widgets):
@@ -84,10 +87,14 @@ class Physics2DPrismaticJointEditGizmo(Physics2DJointEditGizmo):
         else:
             axe_limit_widget = self.joint_axe_limit_widgets[ind_joint]
         
-        axe_limit_widget.color = self.axe_limit_widget_color
-        axe_limit_widget.color_highlight = self.axe_limit_widget_color
+        axe_limit_widget.color = self.joint_color
+        axe_limit_widget.color_highlight = self.joint_color
 
         axe_limit_widget.target_set_prop('direction', joint,"local_axis")
+        axe_limit_widget.target_set_prop('display_joint_gizmos',context.scene.three_physics.physics_2d_viewport_settings,'display_joint_gizmos')
+        axe_limit_widget.target_set_prop('enable_limit',joint,'enable_limit')
+
+
         axe_limit_widget.hide = not joint.enable_limit
 
         if ind_joint >= len(self.joint_axe_rotation_widgets):
@@ -98,11 +105,12 @@ class Physics2DPrismaticJointEditGizmo(Physics2DJointEditGizmo):
         else:
             axe_rotation_widget = self.joint_axe_rotation_widgets[ind_joint]
 
-        axe_rotation_widget.color = self.axe_rotation_widget_color
-        axe_rotation_widget.color_highlight = self.axe_rotation_widget_color
+        axe_rotation_widget.color = self.gizmo_color
+        axe_rotation_widget.color_highlight = self.gizmo_color
 
         axe_rotation_widget.target_set_prop('axis', joint,"local_axis")
         axe_rotation_widget.target_set_prop('anchor_position', joint,"anchor_a")
+        axe_rotation_widget.hide = not self.display_joint_gizmos
 
         if ind_joint >= len(self.joint_axe_error_widgets):
             axe_error_widget = self.gizmos.new(self.axe_error_widget_name)

@@ -20,7 +20,7 @@ class Physics2DWheelJointEditGizmo(Physics2DJointEditGizmo):
 
     @classmethod
     def poll(cls, context):
-        res = physics_2d_can_edit_wheel_joint(context) and display_joint_gizmos(context) and display_joint(context)
+        res = physics_2d_can_edit_wheel_joint(context) and display_joint(context)
         return res
 
     def get_joint_props(self, context):
@@ -37,9 +37,9 @@ class Physics2DWheelJointEditGizmo(Physics2DJointEditGizmo):
     def refresh_widgets(self, context):
        
         self.arrow_widget_name = Physics2DPrismaticAxeWidget.bl_idname
-        self.arrow_widget_color = 0.8, 0.8, 0.8
+        self.arrow_widget_color = self.joint_color
         self.axe_rotation_widget_name = Physics2DAxeRotationWidget.bl_idname
-        self.axe_rotation_widget_color = 0.8, 0.8, 0.8
+        self.axe_rotation_widget_color = self.gizmo_color
         self.axe_error_widget_name = Physics2DAxeWidget.bl_idname
         self.axe_error_widget_color = 1.0, 0.5, 0.5
 
@@ -60,6 +60,8 @@ class Physics2DWheelJointEditGizmo(Physics2DJointEditGizmo):
         arrow_widget.color_highlight = self.arrow_widget_color
 
         arrow_widget.target_set_prop('direction', joint,"local_axis")
+        arrow_widget.target_set_prop('display_joint_gizmos',context.scene.three_physics.physics_2d_viewport_settings,'display_joint_gizmos')
+
 
         if ind_joint >= len(self.joint_axe_rotation_widgets):
             axe_rotation_widget = self.gizmos.new(self.axe_rotation_widget_name)

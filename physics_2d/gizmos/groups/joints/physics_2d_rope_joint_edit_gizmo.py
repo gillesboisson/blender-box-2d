@@ -20,7 +20,7 @@ class Physics2DRopeJointEditGizmo(Physics2DJointEditGizmo):
 
     @classmethod
     def poll(cls, context):
-        res = physics_2d_can_edit_rope_joint(context) and display_joint_gizmos(context) and display_joint(context)
+        res = physics_2d_can_edit_rope_joint(context) and display_joint(context)
         return res
 
 
@@ -47,6 +47,7 @@ class Physics2DRopeJointEditGizmo(Physics2DJointEditGizmo):
 
         rope_widget.target_set_prop('anchor_a', joint,"anchor_a")
         rope_widget.target_set_prop('anchor_b', joint,"anchor_b")
+        rope_widget.target_set_prop('display_joint_gizmos',context.scene.three_physics.physics_2d_viewport_settings,'display_joint_gizmos')
 
 
         

@@ -4,7 +4,7 @@ from bpy_extras import view3d_utils
 from mathutils import Vector
 from .physics_2d_widget import Physics2DWidget
 from ...types import PlanDirection
-from ....utils.vertices import create_square_tris_vertices, vec_3_to_tuple_2
+from ....utils.vertices import create_square_tris_vertices, vec_3_to_tuple_2, tuple_2_to_vec_3
 
 
 import math
@@ -14,20 +14,21 @@ class Physics2DShapeRadiusWidget(Physics2DWidget):
     bl_idname = "VIEW3D_GT_three_physics_2d_shape_radius_widget"
 
     bl_target_properties = (
-        {"id": "shape_circle_radius", "type": 'FLOAT', "array_length": 2},
+        {"id": "shape_position", "type": 'FLOAT', "array_length": 2},
         {"id": "shape_radius", "type": 'FLOAT'},
     )
 
-    def get_mouse_distance(self, context, event):
+    def get_mouse_distance(self, context, event, origin = tuple((0,0))):
         mouse_vec = Vector((event.mouse_region_x, event.mouse_region_y))
-        mouse_position_3d = view3d_utils.region_2d_to_location_3d(context.region, context.space_data.region_3d, mouse_vec, Vector((0,0,0)))
+        origin_position_3d = tuple_2_to_vec_3(context.scene.three_physics.physics_2d_orientation, origin)
+        mouse_position_3d = view3d_utils.region_2d_to_location_3d(context.region, context.space_data.region_3d, mouse_vec, Vector((0,0,0))) - origin_position_3d
         mouse_3d_init_position = self.get_local_position(context, mouse_position_3d)
         mouse_shape_position = vec_3_to_tuple_2(context.scene.three_physics.physics_2d_orientation, mouse_3d_init_position)
         return math.sqrt(mouse_shape_position[0] ** 2 + mouse_shape_position[1] ** 2)
 
     def invoke(self, context, event):
         self.shape_init_radius = self.target_get_value("shape_radius")
-        self.mouse_shape_distance = self.get_mouse_distance(context, event)
+        self.mouse_shape_distance = self.get_mouse_distance(context, event, self.target_get_value("shape_position"))
 
 
 
@@ -39,7 +40,7 @@ class Physics2DShapeRadiusWidget(Physics2DWidget):
 
         if event.type == 'MOUSEMOVE':
 
-            mouse_shape_distance = self.get_mouse_distance(context, event)
+            mouse_shape_distance = self.get_mouse_distance(context, event, self.target_get_value("shape_position"))
 
             self.scale_offset = mouse_shape_distance - self.mouse_shape_distance
 

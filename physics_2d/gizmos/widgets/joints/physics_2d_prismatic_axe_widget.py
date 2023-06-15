@@ -11,6 +11,8 @@ class Physics2DPrismaticAxeWidget(Gizmo):
 
     bl_target_properties = (
         {"id": "direction", "type": 'FLOAT', "array_length": 2},
+        {"id": "display_joint_gizmos", "type": 'BOOLEAN'},
+        {"id": "enable_limit", "type": 'BOOLEAN'},
     )
 
 

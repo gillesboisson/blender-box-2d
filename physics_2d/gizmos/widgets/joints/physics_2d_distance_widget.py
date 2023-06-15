@@ -13,6 +13,8 @@ class Physics2DDistanceWidget(Physics2DWidget):
     bl_target_properties = (
         {"id": "anchor_a", "type": 'FLOAT', "array_length": 2},
         {"id": "anchor_b", "type": 'FLOAT', "array_length": 2},
+        {"id": "display_joint_gizmos", "type": 'BOOLEAN'},
+
     )
     
     def updateShapes(self):
