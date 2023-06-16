@@ -10,7 +10,9 @@ from ..physics_2d.types import PlanDirection
 vert_out = gpu.types.GPUStageInterfaceInfo("three_vert_interface")
 vert_out.smooth('VEC3', "pos")
 
+
 shader_info = gpu.types.GPUShaderCreateInfo()
+
 shader_info.push_constant('MAT4', "viewProjectionMatrix")
 shader_info.push_constant('MAT4', "modelMatrix")
 shader_info.push_constant('VEC4', "color")
@@ -89,6 +91,22 @@ def draw_lines(
 
 
     batch = batch_for_shader(shader, 'LINES', {"position": coords})
+    batch.draw(shader)
+
+
+
+def draw_tris(
+        coords: list[tuple[float,float, float]],
+        color: tuple[float, float, float, float],
+        modelMat: Matrix,  
+        indices = None
+    ):
+
+    vp = bpy.context.region_data.perspective_matrix
+    set_shader_uniforms(vp, modelMat, color)
+
+
+    batch = batch_for_shader(shader, 'TRIS', {"position": coords},indices= None)
     batch.draw(shader)
 
 

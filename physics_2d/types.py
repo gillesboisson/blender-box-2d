@@ -2,6 +2,7 @@
 PhysicsBodyType = (
     ("static", "Static", "Static body"), 
     ("dynamic", "Dynamic", "Dynamic body"), 
+    ("kinetic", "Kinetic", "Kinetic"), 
 )
 
 Physics2DBodyShapeType = (
