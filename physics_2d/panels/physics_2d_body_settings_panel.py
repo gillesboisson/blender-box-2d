@@ -41,7 +41,7 @@ class ThreePhysics2DBodySettingsPanel(bpy.types.Panel):
         col.prop(prop,'awake')
         col.prop(prop,'linear_damping')
         col.prop(prop,'angular_damping' )
-        col.prop(prop,'mass')
+        # col.prop(prop,'mass')
         col.prop(prop,'active')
         col.prop(prop,'linear_velocity')
         col.prop(prop,'angular_velocity')

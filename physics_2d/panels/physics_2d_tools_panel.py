@@ -24,6 +24,12 @@ class ThreePhysics2DToolsPanel(bpy.types.Panel):
         scene = context.scene
         prop = scene.three_physics
         layout = self.layout    
+
+        ob_props = context.object.data.three_rigid_body_2d
+        row = layout.row()
+
+        row.prop(ob_props,"enabled")
+
         layout.label(text="Create shapes")
         row = layout.row()
         row.operator("physics_2d.physics_create_shape_poly", text="Poly")

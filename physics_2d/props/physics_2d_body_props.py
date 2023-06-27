@@ -14,6 +14,7 @@ class Vertex2DPropertyGroup(bpy.types.PropertyGroup):
     
 class RigidBody2DShapePropertyGroup(bpy.types.PropertyGroup):
     # name: StringProperty(name="Name", default="Shape")
+    mass: FloatProperty(name="Mass", default=0,min=0,max=100)
     friction: FloatProperty(name="Friction", default=0.2,min=0,max=10)
     restitution: FloatProperty(name="Restitution", default=0,min=0,max=10)
     density: FloatProperty(name="Density", default=1,min=0,max=10)
@@ -25,6 +26,8 @@ class RigidBody2DShapePropertyGroup(bpy.types.PropertyGroup):
     shape_box_scale: FloatVectorProperty(name="Scale", size=2, default=(1,1))
     shape_position: FloatVectorProperty(name="Position", size=2, default=(0,0))
     shape_angle: FloatProperty(name="Angle", default=0,min=-180,max=180)
+
+    
     shape_radius: FloatProperty(name="Radius",default=0.5, min=0)
     # shape_polygon_geometry: PointerProperty(name="Polygon geometry",type=bpy.types.Mesh)    
     shape_polygon_vertices: CollectionProperty(name="Polygon vertices",type=Vertex2DPropertyGroup)
@@ -37,7 +40,6 @@ class RigidBody2DPropertyGroup(bpy.types.PropertyGroup):
     sleeping_allowed: BoolProperty(name="Sleeping allowed",description="Sleeping allowed", default=True)
     linear_damping: FloatProperty(name="Linear damping", default=0,min=0,max=10)
     angular_damping: FloatProperty(name="Angular damping", default=0,min=0,max=10)
-    mass: FloatProperty(name="Mass", default=0,min=0,max=100)
     active: BoolProperty(name="Active",description="Active", default=True)
     linear_velocity: FloatVectorProperty(name="Linear velocity", size=2, default=(0,0))
     angular_velocity: FloatProperty(name="Angular velocity", default=0)

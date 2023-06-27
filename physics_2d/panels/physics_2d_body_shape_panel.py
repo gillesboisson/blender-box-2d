@@ -46,6 +46,9 @@ class ThreePhysics2DBodyShapesPanel(bpy.types.Panel):
 
             col.separator(factor=2)
 
+            col.prop(shape,'mass')
+            col.separator(factor=2)
+
             col.prop(shape,'shape_position')
             if shape.shape_type != 'circle':
                 col.prop(shape,'shape_angle')

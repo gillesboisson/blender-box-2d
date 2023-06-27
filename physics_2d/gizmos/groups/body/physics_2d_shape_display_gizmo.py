@@ -10,12 +10,12 @@ from ....utils import display_shape, physics_2d_enabled
 
 from .....utils.draw import draw_lines, draw_tris
 
-from .....utils.vertices import create_square_tris_vertices, create_circle_tris_vertices,create_square_line_vertices, create_circle_line_vertices, create_polygon_line_vertices
+from .....utils.vertices import create_square_tris_vertices, create_circle_tris_vertices,create_square_line_vertices, create_circle_line_vertices, create_polygon_line_vertices, get_triangles_indices_from_2d_tuples
 
 
 # draw_shapes_handle = bpy.types.SpaceView3D.draw_handler_add(draw_shapes, args, 'WINDOW', 'POST_PIXEL')
 
-def draw_shapes(self, context):
+def draw_shapes(self, context: Context):
     # global Physics2DShapeDisplayGizmo_draw_handler
     # context.space_data.draw_handler_remove(Physics2DShapeDisplayGizmo_draw_handler, 'WINDOW')
     if(hasattr(context,'scene') and  physics_2d_enabled(context) and display_shape(context)):
@@ -49,7 +49,7 @@ def draw_shapes(self, context):
 
 
         for ob in context.scene.objects:
-            if ob.type == "MESH" and ob.data != None and ob.data.three_rigid_body_2d != None and ob.data.three_rigid_body_2d.enabled == True:
+            if  ob.visible_get() and ob.type == "MESH" and ob.data != None and ob.data.three_rigid_body_2d != None and ob.data.three_rigid_body_2d.enabled == True:
                 shapes = ob.data.three_rigid_body_2d.shapes
                 is_selected = ob in context.selected_objects
 
@@ -97,6 +97,15 @@ def draw_shapes(self, context):
                         shape_mat = base_mat
                         for vertex in shape.shape_polygon_vertices:
                             vertices.append(vertex.pos)
+                        
+                        # if not is_selected:
+                        # triangles = get_triangles_indices_from_2d_tuples(vertices)
+                        # vertices_tri = list()
+                        # for ind_t in triangles:
+                        #     vertices_tri.append(vertices[ind_t])
+                        # draw_tris(vertices_tri, shape_color, shape_mat)
+
+                        
                         draw_lines(create_polygon_line_vertices(vertices),  shape_color, shape_mat)
                         
 
@@ -143,8 +152,16 @@ class Physics2DShapeDisplayGizmo(GizmoGroup):
 
         global Physics2DShapeDisplayGizmo_draw_handler
         clear_physic_2d_shape_draw_handler()
-        Physics2DShapeDisplayGizmo_draw_handler = bpy.types.SpaceView3D.draw_handler_add(draw_shapes, (self, context), 'WINDOW', 'POST_VIEW')
-    
+        Physics2DShapeDisplayGizmo_draw_handler = bpy.types.SpaceView3D.draw_handler_add(draw_shapes, (self, context), 'WINDOW', 'POST_PIXEL')
+
+        # my_pts = list(
+        #     ((0,0),(0,1),(1,0),(1,1))
+        # )
+
+        # triangles = get_triangles_indices_from_2d_tuples(my_pts)
+
+        # print(triangles)
+
     def draw_prepare(self, context: Context):
         draw_shapes(self,context)
 

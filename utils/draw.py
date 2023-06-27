@@ -106,7 +106,7 @@ def draw_tris(
     set_shader_uniforms(vp, modelMat, color)
 
 
-    batch = batch_for_shader(shader, 'TRIS', {"position": coords},indices= None)
+    batch = batch_for_shader(shader, 'TRIS', {"position": coords},indices=indices)
     batch.draw(shader)
 
 

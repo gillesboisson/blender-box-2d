@@ -5,6 +5,8 @@ from ..physics_2d.types import PlanDirection
 
 from .plan import *
 
+from .delaunay import Delaunay2D
+
 
 box_line_vertices = (
     (-1, -1, -1), (1, -1, -1),
@@ -21,6 +23,7 @@ box_line_vertices = (
     (1, -1, 1), (1, -1, -1),
     (1, 1, 1), (1, 1, -1)
 )
+
 
 
     
@@ -103,6 +106,21 @@ def vertices_2d_to_vertices(vertices_2d, plan_direction='Z'):
         
     
     return vertices
+
+def get_triangles_indices_from_2d_tuples(vertices: list, plan_direction='Z'):
+
+    delaunay = Delaunay2D()
+    for pt in vertices:
+        delaunay.addPoint(pt)
+
+    triangles =  delaunay.exportTriangles()
+    indices = list()
+    for tr in triangles:
+        for ind in tr:
+            indices.append(ind)
+
+    return indices
+    
 
 
 def create_square_tris_vertices(size=Vector((1,1)), plan_direction='Z',position=Vector((0,0))):

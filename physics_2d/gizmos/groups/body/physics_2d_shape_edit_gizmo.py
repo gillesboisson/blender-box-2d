@@ -17,7 +17,7 @@ class Physics2DShapeEditGizmo(GizmoGroup):
         plan_direction = context.scene.three_physics.physics_2d_orientation
 
         orientation_mat = get_plan_matrix(plan_direction)
-        clamp_world_mat = clamp_matrix_to_plan(plan_direction, matrix_world)
+        clamp_world_mat = clamp_matrix_to_plan(plan_direction, matrix_world, True)
         
         local_mat = Matrix.Translation(Vector((shape.shape_position[0],shape.shape_position[1],0.0)))
         

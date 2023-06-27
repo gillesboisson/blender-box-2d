@@ -31,7 +31,7 @@ def get_plan_matrix(orientation: PlanDirection) -> Matrix:
         return orientation_mat_z
     
 
-def clamp_matrix_to_plan(orientation: PlanDirection, matrix: Matrix) -> Matrix:
+def clamp_matrix_to_plan(orientation: PlanDirection, matrix: Matrix, applyScale = True) -> Matrix:
 
     scale = matrix.to_scale()
     loc = matrix.to_translation()
@@ -55,8 +55,12 @@ def clamp_matrix_to_plan(orientation: PlanDirection, matrix: Matrix) -> Matrix:
         loc.z = 0
 
      
-    return Matrix.Translation(loc) @ Matrix.Scale(scale.x, 4, (1,0,0)) @ Matrix.Scale(scale.y, 4, (0,1,0)) @ Matrix.Scale(scale.z, 4, (0,0,1)) @ rot_mat 
+    resMat =  Matrix.Translation(loc) @ rot_mat
 
+    if(applyScale):
+        resMat = resMat @ Matrix.Scale(scale.x, 4, (1,0,0)) @ Matrix.Scale(scale.y, 4, (0,1,0)) @ Matrix.Scale(scale.z, 4, (0,0,1))
+
+    return resMat
 
     
 
