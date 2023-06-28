@@ -1,7 +1,6 @@
 import bpy
 from bpy.props import *
 from bpy.utils import register_class, unregister_class
-from .physics_2d_joints_props import Physics2DRevoluteJointPropertyGroup, Physics2DPrismaticJointPropertyGroup, Physics2DDistanceJointPropertyGroup, Physics2DWheelsJointPropertyGroup,Physics2DRopeJointPropertyGroup
 
 from ..types import PlanDirection
 
@@ -13,12 +12,7 @@ physics_property_name = 'three_physics'
 #     print(self.physics_2d_display_shape)
 #     return
 
-class Physics2DJointsPropertyGroup(bpy.types.PropertyGroup):
-    revolute_joints: CollectionProperty(name="Revolute joints", type=Physics2DRevoluteJointPropertyGroup)
-    prismatic_joints: CollectionProperty(name="Prismatic joints", type=Physics2DPrismaticJointPropertyGroup)
-    distance_joints: CollectionProperty(name="Distance joints", type=Physics2DDistanceJointPropertyGroup)
-    wheel_joints: CollectionProperty(name="Wheels joints", type=Physics2DWheelsJointPropertyGroup)
-    rope_joints: CollectionProperty(name="Rope joints", type=Physics2DRopeJointPropertyGroup)
+
 
 class Physics2DViewportSettingsPropertyGroup(bpy.types.PropertyGroup):
     display_shape_gizmos: BoolProperty(name="Display shape gizmos",description="Display shape gizmos", default=True)
@@ -38,7 +32,7 @@ class PhysicsScenePropertyGroup(bpy.types.PropertyGroup):
     physics_2d_orientation: EnumProperty(name="Orientation", items = PlanDirection, default='Z') 
     physics_2d_display_shape: BoolProperty(name="Display shape",description="Display shape", default=False)
 
-    physics_2d_joints: PointerProperty(type=Physics2DJointsPropertyGroup)
+    # physics_2d_joints: PointerProperty(type=Physics2DJointsPropertyGroup)
     physics_2d_viewport_settings: PointerProperty(type=Physics2DViewportSettingsPropertyGroup)
 
     # 3D options
@@ -46,7 +40,6 @@ class PhysicsScenePropertyGroup(bpy.types.PropertyGroup):
 
     
 classes = (
-    Physics2DJointsPropertyGroup,
     Physics2DViewportSettingsPropertyGroup,
     PhysicsScenePropertyGroup,
 )

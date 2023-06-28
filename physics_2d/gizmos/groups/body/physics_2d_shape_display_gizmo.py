@@ -22,11 +22,11 @@ def draw_shapes(self, context: Context):
         plan_direction = context.scene.three_physics.physics_2d_orientation
         orientation_mat = get_plan_matrix(plan_direction)
 
-        square = create_square_tris_vertices(plan_direction=plan_direction)
-        circle = create_circle_tris_vertices(plan_direction=plan_direction)
+        square = create_square_tris_vertices()
+        circle = create_circle_tris_vertices()
 
-        square_outline = create_square_line_vertices(plan_direction=plan_direction)
-        circle_outline = create_circle_line_vertices(plan_direction=plan_direction)
+        square_outline = create_square_line_vertices()
+        circle_outline = create_circle_line_vertices()
 
 
         # print('> draws_shapes')
@@ -152,7 +152,7 @@ class Physics2DShapeDisplayGizmo(GizmoGroup):
 
         global Physics2DShapeDisplayGizmo_draw_handler
         clear_physic_2d_shape_draw_handler()
-        Physics2DShapeDisplayGizmo_draw_handler = bpy.types.SpaceView3D.draw_handler_add(draw_shapes, (self, context), 'WINDOW', 'POST_PIXEL')
+        Physics2DShapeDisplayGizmo_draw_handler = bpy.types.SpaceView3D.draw_handler_add(draw_shapes, (self, context), 'WINDOW', 'PRE_VIEW')
 
         # my_pts = list(
         #     ((0,0),(0,1),(1,0),(1,1))

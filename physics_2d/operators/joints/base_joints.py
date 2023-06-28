@@ -10,7 +10,7 @@ from bpy.types import Context, Event
 
 class Physics2DCreateJointOperator(bpy.types.Operator):
 
-    def add_joint(self, context, event):
+    def add_joint(self, context, body_a, body_b, event):
         return None
     
     def set_joint_props(self, context, joint, body_a, body_b):
@@ -33,11 +33,17 @@ class Physics2DCreateJointOperator(bpy.types.Operator):
             self.report({'INFO'}, "Select 2 objects  with physics 2D enabled")
             return {'CANCELLED'}
         
-        self.body_a = ob_with_bodies[0]
-        self.body_b = ob_with_bodies[1]
+        self.body_b = context.object
+
+        for ob in ob_with_bodies:
+            if(ob != self.body_b):
+                self.body_a = ob
+
         
-        joint = self.add_joint(context, event)
-        joint.body_a = self.body_a
+        joint = self.add_joint(context, self.body_a, self.body_b, event)
+
+        # joint = self.add_joint(context, self.body_a, event)
+        # joint.body_a = self.body_a
         joint.body_b = self.body_b
 
         self.set_joint_props(context, joint, self.body_a, self.body_b)

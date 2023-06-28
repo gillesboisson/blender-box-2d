@@ -18,11 +18,7 @@ class Physics2DDeleteWheelJointOperator(bpy.types.Operator):
     
 
     def invoke(self, context: Context, event:Event):
-
-        
-        context.scene.three_physics.physics_2d_joints.wheel_joints.remove(self.joint_index)
-
-
+        context.object.physics_2d_joints.wheel_joints.remove(self.joint_index)
         return {'FINISHED'}
     
 

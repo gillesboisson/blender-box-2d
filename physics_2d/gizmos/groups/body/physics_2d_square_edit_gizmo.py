@@ -9,7 +9,7 @@ from ...widgets.physics_2d_square_widget import Physics2DSquareWidget
 from bpy.props import *
 
 
-from ....utils import display_shape, physics_2d_enabled_on_mesh 
+from ....utils import display_shape_gizmos, physics_2d_enabled_on_mesh 
 
 from ...widgets.physics_2d_shape_scale_widget import Physics2DShapeScaleWidget
 from .physics_2d_shape_edit_gizmo import Physics2DShapeEditGizmo
@@ -25,7 +25,7 @@ class Physics2DSquareEditGizmo(Physics2DShapeEditGizmo):
 
     @classmethod
     def poll(cls, context):
-        return physics_2d_enabled_on_mesh(context) and display_shape(context)
+        return physics_2d_enabled_on_mesh(context) and display_shape_gizmos(context)
 
     poly_gizmo_bl_name = Physics2DSquareWidget.bl_idname
     shape_type = "box"
@@ -66,7 +66,7 @@ class Physics2DSquareEditGizmo(Physics2DShapeEditGizmo):
         super().refresh_shape_mat(context, base_mat, local_mat, shape, ind_shape)
 
         scale_widget = self.scale_widgets[ind_shape]
-        scale_offset_mat = Matrix.Translation(Vector((shape.shape_box_scale[0] / 2,shape.shape_box_scale[1] / 2,0.0)))
+        scale_offset_mat = Matrix.Translation(Vector((shape.shape_box_scale[0] / 2,shape.shape_box_scale[1] / 2,0.0))) @ self.cached_object_inv_scale_mat
 
         scale_widget.matrix_basis = local_mat @ scale_offset_mat
 

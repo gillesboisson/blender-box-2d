@@ -59,7 +59,6 @@ class Physics2DShapeRotateWidget(Physics2DWidget):
         return {'RUNNING_MODAL'}
 
     def modal(self, context: Context, event: Event, tweak):
-        orientation = context.scene.three_physics.physics_2d_orientation
 
 
         if event.type == 'MOUSEMOVE':
@@ -67,6 +66,8 @@ class Physics2DShapeRotateWidget(Physics2DWidget):
             mouse_vec = Vector((event.mouse_region_x, event.mouse_region_y))
             mouse_vec_3d = view3d_utils.region_2d_to_location_3d(context.region, context.space_data.region_3d, mouse_vec, Vector((0,0,0)))
             local_mouse_3d = self.get_local_position(context, mouse_vec_3d)
+
+        
 
             # angle_mouse_offset = local_mouse_3d_offset - self.mouse_3d_init_position 
             local_mouse_angle = self.get_local_angle(context, local_mouse_3d)

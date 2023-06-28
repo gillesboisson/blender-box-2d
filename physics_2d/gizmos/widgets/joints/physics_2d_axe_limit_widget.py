@@ -13,6 +13,8 @@ class Physics2DAxeLimitWidget(Physics2DWidget):
         {"id": "direction", "type": 'FLOAT', "array_length": 2},
         {"id": "display_joint_gizmos", "type": 'BOOLEAN'},
         {"id": "enable_limit", "type": 'BOOLEAN'},
+        {"id": "lower", "type": 'FLOAT'},
+        {"id": "upper", "type": 'FLOAT'},
 
     )
 

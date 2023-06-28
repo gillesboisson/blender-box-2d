@@ -10,17 +10,17 @@ def physics_2d_enabled(context):
 def object_can_have_joint(context,ob):
     return ob and ob.type == "MESH" and ob.data != None and ob.data.three_rigid_body_2d != None and ob.data.three_rigid_body_2d.enabled 
 
-def physics_2d_can_edit_revolute_joint(context):
-    if not physics_2d_enabled_on_mesh(context):
-        return False
+# def physics_2d_can_edit_revolute_joint(context):
+#     if not physics_2d_enabled_on_mesh(context):
+#         return False
     
-    joints = context.scene.three_physics.physics_2d_joints.revolute_joints
+#     joints = context.scene.three_physics.physics_2d_joints.revolute_joints
 
-    # for joint in joints:
-    #     if joint.body_a == context.object or joint.body_b == context.object:
-    #         return True
+#     # for joint in joints:
+#     #     if joint.body_a == context.object or joint.body_b == context.object:
+#     #         return True
         
-    return True
+#     return True
 
 def physics_2d_can_edit_prismatic_joint(context):
     if not physics_2d_enabled_on_mesh(context):
@@ -92,6 +92,9 @@ def physics_2d_enabled_on_mesh(context):
 
 def display_shape(context):
     return context.scene.three_physics.physics_2d_viewport_settings.display_shape
+
+def display_shape_gizmos(context):
+    return context.scene.three_physics.physics_2d_viewport_settings.display_shape_gizmos
 
 def display_joint_gizmos(context):
     return context.scene.three_physics.physics_2d_viewport_settings.display_joint_gizmos

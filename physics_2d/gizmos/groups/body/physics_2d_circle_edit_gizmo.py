@@ -1,19 +1,14 @@
-from math import pi
 from mathutils import Matrix, Vector
 from ...widgets.physics_2d_shape_radius_widget import Physics2DShapeRadiusWidget
-from ...widgets.physics_2d_shape_scale_widget import Physics2DShapeScaleWidget
-from ...widgets.physics_2d_shape_move_widget import Physics2DShapeMoveWidget
-from ...widgets.physics_2d_shape_rotate_widget import Physics2DShapeRotateWidget
-from .....utils.plan import  clamp_matrix_to_plan, get_plan_matrix
 
-from bpy.types import (Context, GizmoGroup, Operator)
+from bpy.types import (Context)
 from bpy.props import *
 
 from .physics_2d_shape_edit_gizmo import Physics2DShapeEditGizmo
 
 
 
-from ....utils import display_shape, physics_2d_enabled_on_mesh 
+from ....utils import display_shape_gizmos, physics_2d_enabled_on_mesh 
 
 from ...widgets.physics_2d_circle_widget import Physics2DCircleWidget
 
@@ -30,7 +25,7 @@ class Physics2DCircleEditGizmo(Physics2DShapeEditGizmo):
 
     @classmethod
     def poll(cls, context):
-        return physics_2d_enabled_on_mesh(context) and display_shape(context)
+        return physics_2d_enabled_on_mesh(context) and display_shape_gizmos(context)
 
 
 
@@ -71,7 +66,7 @@ class Physics2DCircleEditGizmo(Physics2DShapeEditGizmo):
 
         radius_widget = self.radius_widgets[ind_shape]
         scale_offset_mat = Matrix.Translation(Vector((shape.shape_radius,0,0.0)))
-        radius_widget.matrix_basis =  base_mat @ scale_offset_mat
+        radius_widget.matrix_basis =  base_mat @ scale_offset_mat @ self.cached_object_inv_scale_mat
 
         
 

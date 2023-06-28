@@ -43,7 +43,7 @@ class ThreePhysics2DToolsPanel(bpy.types.Panel):
         col.operator("physics_2d.physics_create_prismatic_joint", text="Prismatic")
         col.operator("physics_2d.physics_create_distance_joint", text="Distance")
         col.operator("physics_2d.physics_create_wheel_joint", text="Wheel")
-        col.operator("physics_2d.physics_create_rope_joint", text="Rope")
+        # col.operator("physics_2d.physics_create_rope_joint", text="Rope")
         
 
         

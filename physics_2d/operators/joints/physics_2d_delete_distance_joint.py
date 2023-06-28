@@ -20,7 +20,7 @@ class Physics2DDeleteDistanceJointOperator(bpy.types.Operator):
     def invoke(self, context: Context, event:Event):
 
         
-        context.scene.three_physics.physics_2d_joints.distance_joints.remove(self.joint_index)
+        context.object.physics_2d_joints.distance_joints.remove(self.joint_index)
 
 
         return {'FINISHED'}

@@ -13,7 +13,7 @@ classes = (
     Physics2DPrismaticJointEditGizmo,
     Physics2DDistanceJointEditGizmo,
     Physics2DWheelJointEditGizmo,
-    Physics2DRopeJointEditGizmo,
+    # Physics2DRopeJointEditGizmo,
 )
 
 def register_joints_groups():

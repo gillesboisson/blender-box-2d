@@ -13,6 +13,8 @@ class Physics2DWidget(Gizmo):
     last_orientation = None
 
     mouse_3d_offset = Vector((0,0,0))
+
+    reference_object = None
     
     def draw(self, context):
 
@@ -40,7 +42,11 @@ class Physics2DWidget(Gizmo):
         return
 
     def get_object_matrix_inverted(self, context, face_direction):
-        return clamp_matrix_to_plan(face_direction, context.object.matrix_world).inverted()
+        if(self.reference_object is not None):
+            ref_object = self.reference_object
+        else:
+            ref_object = context.object
+        return clamp_matrix_to_plan(face_direction, ref_object.matrix_world).inverted()
         
 
     def get_local_position(self, context, position):

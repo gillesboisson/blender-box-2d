@@ -1,3 +1,4 @@
+from .....utils.plan import get_plan_2d_vector
 from ..physics_2d_widget import Physics2DWidget
 from mathutils import Vector
 
@@ -38,10 +39,11 @@ class Physics2DAxeRotationWidget(Physics2DWidget):
 
         return local_angle
 
-    def get_local_mouse_angle(self, mouse_position: Vector):
+    def get_local_mouse_angle(self, context, mouse_position: Vector):
+        local_mouse_position = get_plan_2d_vector(context.scene.three_physics.physics_2d_orientation, mouse_position)
         mouse_angle_axis = Vector((
-           mouse_position.x - self.init_position[0], 
-            mouse_position.y - self.init_position[1]
+           local_mouse_position.x - self.init_position[0], 
+            local_mouse_position.y - self.init_position[1]
             )).normalized()
         
         angle = acos(mouse_angle_axis.x)
@@ -59,24 +61,26 @@ class Physics2DAxeRotationWidget(Physics2DWidget):
 
         self.init_mouse(context, event)
 
-       
-        self.mouse_init_angle = self.get_local_mouse_angle( self.mouse_3d_init_position)
+
+        self.mouse_init_angle = self.get_local_mouse_angle( context,self.mouse_3d_init_position)
 
 
         return {'RUNNING_MODAL'}
 
     def modal(self, context: Context, event: Event, tweak):
-        orientation = context.scene.three_physics.physics_2d_orientation
 
 
         if event.type == 'MOUSEMOVE':
 
             mouse_vec = Vector((event.mouse_region_x, event.mouse_region_y))
             mouse_vec_3d = view3d_utils.region_2d_to_location_3d(context.region, context.space_data.region_3d, mouse_vec, Vector((0,0,0)))
-            local_mouse_3d = self.get_local_position(context, mouse_vec_3d)
+            
 
+            local_mouse_3d = self.get_local_position(context, mouse_vec_3d)
+        
             # angle_mouse_offset = local_mouse_3d_offset - self.mouse_3d_init_position 
-            local_mouse_angle = self.get_local_mouse_angle(local_mouse_3d)
+            local_mouse_angle = self.get_local_mouse_angle(context,local_mouse_3d)
+
 
             local_mouse_angle_offset = local_mouse_angle - self.mouse_init_angle
 

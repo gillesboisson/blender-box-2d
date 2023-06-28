@@ -12,7 +12,7 @@ matFaceZ = Matrix()
 def get_face_orientation_matrix(orientation: PlanDirection) -> Matrix:
     if orientation == 'X':
         return matFaceX
-    elif orientation == "y":
+    elif orientation == "Y":
         return matFaceY
     else:
         return matFaceZ

@@ -4,7 +4,7 @@ from mathutils import Matrix, Vector
 
 from bpy.props import *
 
-from ....utils import display_shape, physics_2d_enabled_on_mesh 
+from ....utils import display_shape_gizmos, physics_2d_enabled_on_mesh 
 
 
 from ...widgets.physics_2d_polygon_widget import Physics2DPolygonWidget
@@ -26,7 +26,7 @@ class Physics2DPolygonEditGizmo(Physics2DShapeEditGizmo):
 
     @classmethod
     def poll(cls, context):
-        return physics_2d_enabled_on_mesh(context) and display_shape(context)
+        return physics_2d_enabled_on_mesh(context) and display_shape_gizmos(context)
     
 
     def setup(self, context):
@@ -35,17 +35,48 @@ class Physics2DPolygonEditGizmo(Physics2DShapeEditGizmo):
         super().setup(context)
         return 
     
+    def setup_widget_colors(self, context: Context):
+        super().setup_widget_colors(context)
+    
+        if(context.object.data.three_rigid_body_2d.body_type == 'static'):
+            self.polygon_widget_color = 0.5, 1.0, 0.5
+            self.polygon_widget_alpha = 0.8
+        elif(context.object.data.three_rigid_body_2d.body_type == 'dynamic'):
+            self.polygon_widget_color = 0.5, 0.5, 1.0
+            self.polygon_widget_alpha = 0.8
+        else:
+            self.polygon_widget_color = 0.5, 0.5, 0.5
+            self.polygon_widget_alpha = 0.8
+
     def refresh_shapes_widgets(self, context: Context):
         self.vertex_widget_ind = 0
         super().refresh_shapes_widgets(context)
     
+    
+
     def refresh_shape_widgets(self, context: Context, shape, ind):
 
         super().refresh_shape_widgets(context, shape, ind)
         
+        if(len(self.polygon_widgets) <= ind):
+            polygon_widget = self.gizmos.new(self.poly_gizmo_bl_name)
+            self.polygon_widgets.append(polygon_widget)
+            polygon_widget.use_draw_scale = False
+            polygon_widget.hide = True
+        else:
+            polygon_widget = self.polygon_widgets[ind]
 
-        self.polygon_widgets[ind].shape_polygon_vertices =  shape.shape_polygon_vertices
-        self.polygon_widgets[ind].updateShapes()
+        polygon_widget.target_set_prop("body_type", context.object.data.three_rigid_body_2d, "body_type")
+        polygon_widget.target_set_prop("display_shape_gizmos", context.scene.three_physics.physics_2d_viewport_settings, "display_shape_gizmos")
+        
+
+        polygon_widget.color = self.polygon_widget_color
+        polygon_widget.alpha = self.polygon_widget_alpha
+        polygon_widget.color_highlight  = self.polygon_widget_color
+        polygon_widget.alpha_highlight = self.polygon_widget_alpha
+        
+        polygon_widget.shape_polygon_vertices =  shape.shape_polygon_vertices
+        polygon_widget.updateShapes()
         
 
         vertices_pos = shape.shape_polygon_vertices
@@ -105,6 +136,8 @@ class Physics2DPolygonEditGizmo(Physics2DShapeEditGizmo):
 
     def remove_shapes_widgets(self, context: Context, len_shapes, len_widgets):
         super().remove_shapes_widgets(context, len_shapes, len_widgets)
+        
+        
 
         nb_vertices = 0
         for shape in context.object.data.three_rigid_body_2d.shapes:
@@ -121,8 +154,15 @@ class Physics2DPolygonEditGizmo(Physics2DShapeEditGizmo):
             self.gizmos.remove(vertex_create_widget)
 
         
+
         
 
+    def remove_shape_widget(self, ind_shape):
+        super().remove_shape_widget(ind_shape)
+
+        polygon_widget = self.polygon_widgets[ind_shape]
+        self.gizmos.remove(polygon_widget)
+        self.polygon_widgets.remove(polygon_widget)
         
 
     def refresh_shape_mats(self, context: Context):
@@ -133,6 +173,8 @@ class Physics2DPolygonEditGizmo(Physics2DShapeEditGizmo):
 
     def refresh_shape_mat(self, context: Context, base_mat, local_mat, shape, ind_shape):
         super().refresh_shape_mat(context, base_mat, local_mat, shape, ind_shape)
+        polygon_widget = self.polygon_widgets[ind_shape]
+        polygon_widget.matrix_basis =  local_mat @ self.scale_mat(context,shape,ind_shape) @ self.cached_object_inv_scale_mat
 
         vertices_pos = shape.shape_polygon_vertices
         # len_vertices_widgets = len(self.vertex_move_widgets)
@@ -161,10 +203,10 @@ class Physics2DPolygonEditGizmo(Physics2DShapeEditGizmo):
             middle_position = (next_vertex_position_3 + vertex_position_3) / 2.0
 
             widget_mat = local_mat @ Matrix.Translation(vertex_position_3)
-            vertex_move_widget.matrix_basis = widget_mat
+            vertex_move_widget.matrix_basis = widget_mat  @ self.cached_object_inv_scale_mat
 
             create_vertex_mat = local_mat @ Matrix.Translation(middle_position)
-            vertex_create_widget.matrix_basis = create_vertex_mat
+            vertex_create_widget.matrix_basis = create_vertex_mat  @ self.cached_object_inv_scale_mat
 
         self.vertex_widget_ind += len_vertices_pos
 

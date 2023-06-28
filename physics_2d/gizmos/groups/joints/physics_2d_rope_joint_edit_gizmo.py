@@ -42,8 +42,8 @@ class Physics2DRopeJointEditGizmo(Physics2DJointEditGizmo):
         else:
             rope_widget = self.joint_rope_widgets[ind_joint]
 
-        rope_widget.color = self.anchor_a_color
-        rope_widget.color_highlight = self.anchor_a_color
+        rope_widget.color = self.anchor_color
+        rope_widget.color_highlight = self.anchor_color
 
         rope_widget.target_set_prop('anchor_a', joint,"anchor_a")
         rope_widget.target_set_prop('anchor_b', joint,"anchor_b")
@@ -60,8 +60,8 @@ class Physics2DRopeJointEditGizmo(Physics2DJointEditGizmo):
         else:
             limit_widget = self.joint_limit_widgets[ind_joint]
 
-        limit_widget.color = self.anchor_a_color
-        limit_widget.color_highlight = self.anchor_a_color
+        limit_widget.color = self.anchor_color
+        limit_widget.color_highlight = self.anchor_color
 
         limit_widget.target_set_prop('anchor_a', joint,"anchor_a")
         limit_widget.target_set_prop('anchor_b', joint,"anchor_b")
@@ -74,8 +74,8 @@ class Physics2DRopeJointEditGizmo(Physics2DJointEditGizmo):
         else:
             rope_arc = self.joint_rope_arc_widgets[ind_joint]
 
-        rope_arc.color = self.anchor_a_color
-        rope_arc.color_highlight = self.anchor_a_color
+        rope_arc.color = self.anchor_color
+        rope_arc.color_highlight = self.anchor_color
 
         rope_arc.target_set_prop('anchor_a', joint,"anchor_a")
         rope_arc.target_set_prop('anchor_b', joint,"anchor_b")

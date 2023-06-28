@@ -17,14 +17,19 @@ class Physics2DCreateWheelJointOperator(Physics2DCreateJointOperator):
     def poll(cls, context):
         return physics_2d_enabled_on_mesh(context)
     
-    def add_joint(self, context, event):
-        return context.scene.three_physics.physics_2d_joints.wheel_joints.add()
+    def add_joint(self, context, body_a, body_b, event):
+
+        return body_a.physics_2d_joints.wheel_joints.add()
+    
+
 
     def set_joint_props(self, context, joint, body_a, body_b):
         plan_direction = context.scene.three_physics.physics_2d_orientation
         orientation_mat = get_plan_matrix(plan_direction).inverted()
         local_position_a = orientation_mat @ body_a.matrix_world.translation
         local_position_b = orientation_mat @ body_b.matrix_world.translation
-        len = (local_position_a - local_position_b).length
-        joint.length = len
+
+        local_anchor_pos = local_position_b - local_position_a
+        joint.anchor_a = (local_anchor_pos.x, local_anchor_pos.y)
+        
         return
