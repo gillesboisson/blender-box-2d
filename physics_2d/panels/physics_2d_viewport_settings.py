@@ -14,7 +14,7 @@ class ThreePhysics2DViewportSettingsPanel(bpy.types.Panel):
     # bl_category = "Physics 2D"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = "Physics 2D"
+    bl_category = "Box 2D"
 
     # @classmethod
     # def poll(cls, context):

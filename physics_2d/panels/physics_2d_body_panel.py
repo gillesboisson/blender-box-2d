@@ -5,7 +5,7 @@ from ..utils import physics_2d_enabled_and_mesh_selected
 class ThreePhysics2DBodyPanel(bpy.types.Panel):
 
     bl_idname = 'VIEW3D_PT_three_physics_2D_body_panel'
-    bl_label = 'Three rigid body'
+    bl_label = 'Box2D rigid body'
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_context = "object"

@@ -8,6 +8,7 @@ from ..utils import object_can_have_joint
     
 class Physics2DRevoluteJointPropertyGroup(bpy.types.PropertyGroup):
     name: StringProperty(name="Name", default="Revolute joint")
+    body_a: PointerProperty(name="Body A", type=bpy.types.Object, poll=object_can_have_joint)
     body_b: PointerProperty(name="Body B", type=bpy.types.Object, poll=object_can_have_joint)
     anchor_a: FloatVectorProperty(name="Anchor A", default=(0,0), size=2)
     collide_connected: BoolProperty(name="Collide connected", default=False)
@@ -21,7 +22,7 @@ class Physics2DRevoluteJointPropertyGroup(bpy.types.PropertyGroup):
 
 class Physics2DDistanceJointPropertyGroup(bpy.types.PropertyGroup):
     name: StringProperty(name="Name", default="Distance joint")
-    # body_a: PointerProperty(name="Body A", type=bpy.types.Object, poll=object_can_have_joint)
+    body_a: PointerProperty(name="Body A", type=bpy.types.Object, poll=object_can_have_joint)
     body_b: PointerProperty(name="Body B", type=bpy.types.Object, poll=object_can_have_joint)
     anchor_a: FloatVectorProperty(name="Anchor A", default=(0,0), size=2)
     anchor_b: FloatVectorProperty(name="Anchor B", default=(0,0), size=2)
@@ -37,7 +38,7 @@ class Physics2DDistanceJointPropertyGroup(bpy.types.PropertyGroup):
 
 class Physics2DPrismaticJointPropertyGroup(bpy.types.PropertyGroup):
     name: StringProperty(name="Name", default="Prismatic joint")
-    # body_a: PointerProperty(name="Body A", type=bpy.types.Object, poll=object_can_have_joint)
+    body_a: PointerProperty(name="Body A", type=bpy.types.Object, poll=object_can_have_joint)
     body_b: PointerProperty(name="Body B", type=bpy.types.Object, poll=object_can_have_joint)
     anchor_a: FloatVectorProperty(name="Anchor A", default=(0,0), size=2)
     # anchor_b: FloatVectorProperty(name="Anchor B", default=(0,0), size=2)
@@ -55,7 +56,7 @@ class Physics2DPrismaticJointPropertyGroup(bpy.types.PropertyGroup):
 
 class Physics2DWheelsJointPropertyGroup(bpy.types.PropertyGroup):
     name: StringProperty(name="Name", default="Wheel joint")
-    # body_a: PointerProperty(name="Body A", type=bpy.types.Object, poll=object_can_have_joint)
+    body_a: PointerProperty(name="Body A", type=bpy.types.Object, poll=object_can_have_joint)
     body_b: PointerProperty(name="Body B", type=bpy.types.Object, poll=object_can_have_joint)
     anchor_a: FloatVectorProperty(name="Anchor A", default=(0,0), size=2)
     # anchor_b: FloatVectorProperty(name="Anchor B", default=(0,0), size=2)
@@ -74,14 +75,6 @@ class Physics2DWheelsJointPropertyGroup(bpy.types.PropertyGroup):
     stiffness: FloatProperty(name="Stiffness", default=0)
     damping_ratio: FloatProperty(name="Damping ratio", default=0)
 
-# class Physics2DRopeJointPropertyGroup(bpy.types.PropertyGroup):
-#     name: StringProperty(name="Name", default="Rope joint")
-#     # body_a: PointerProperty(name="Body A", type=bpy.types.Object, poll=object_can_have_joint)
-#     body_b: PointerProperty(name="Body B", type=bpy.types.Object, poll=object_can_have_joint)
-#     anchor_a: FloatVectorProperty(name="Anchor A", default=(0,0), size=2)
-#     anchor_b: FloatVectorProperty(name="Anchor B", default=(0,0), size=2)
-#     collide_connected: BoolProperty(name="Collide connected", default=False)
-#     length: FloatProperty(name="Length", default=0)
 
 
 class Physics2DJointsPropertyGroup(bpy.types.PropertyGroup):
@@ -89,14 +82,12 @@ class Physics2DJointsPropertyGroup(bpy.types.PropertyGroup):
     prismatic_joints: CollectionProperty(name="Prismatic joints", type=Physics2DPrismaticJointPropertyGroup)
     distance_joints: CollectionProperty(name="Distance joints", type=Physics2DDistanceJointPropertyGroup)
     wheel_joints: CollectionProperty(name="Wheels joints", type=Physics2DWheelsJointPropertyGroup)
-    # rope_joints: CollectionProperty(name="Rope joints", type=Physics2DRopeJointPropertyGroup)
 
 classes = (
     Physics2DRevoluteJointPropertyGroup,
     Physics2DPrismaticJointPropertyGroup,
     Physics2DDistanceJointPropertyGroup,
     Physics2DWheelsJointPropertyGroup,
-    # Physics2DRopeJointPropertyGroup,
     Physics2DJointsPropertyGroup
 )
 

@@ -14,7 +14,7 @@ class ThreePhysics2DToolsPanel(bpy.types.Panel):
     # bl_category = "Physics 2D"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = "Physics 2D"
+    bl_category = "Box 2D"
 
     # @classmethod
     # def poll(cls, context):
@@ -28,7 +28,7 @@ class ThreePhysics2DToolsPanel(bpy.types.Panel):
         ob_props = context.object.data.three_rigid_body_2d
         row = layout.row()
 
-        row.prop(ob_props,"enabled")
+        row.prop(ob_props,"enabled", text="Rigid body")
 
         layout.label(text="Create shapes")
         row = layout.row()
