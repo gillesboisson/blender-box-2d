@@ -43,7 +43,7 @@ class Physics2DCreateJointOperator(bpy.types.Operator):
         joint = self.add_joint(context, self.body_a, self.body_b, event)
 
         # joint = self.add_joint(context, self.body_a, event)
-        # joint.body_a = self.body_a
+        joint.body_a = self.body_a
         joint.body_b = self.body_b
 
         self.set_joint_props(context, joint, self.body_a, self.body_b)

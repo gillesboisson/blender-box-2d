@@ -81,7 +81,6 @@ class Physics2DJointEditGizmo(GizmoGroup):
         self.refresh_anchor_widget(context, joint, ind_joint, self.anchors_widgets, anchor_gizmo_name, self.anchor_color, "anchor_a")
 
 
-
     def remove_joint_widgets(self, context: Context, nb_joint):
         
         self.remove_anchor_widget(context, self.anchors_widgets, nb_joint)
@@ -92,13 +91,29 @@ class Physics2DJointEditGizmo(GizmoGroup):
 
 
         joints = self.get_joint_props(context)
-        self.joints = joints
+        # self.joints = joints
         anchor_gizmo_name_a = self.anchor_gizmo_name_a()
+        ind_joint = 0
+        # for ind_joint in range(0,len(joints)):
+        #     self.refresh_joint_widget(context, joints[ind_joint], ind_joint, anchor_gizmo_name_a)
 
-        for ind_joint in range(0,len(joints)):
-            self.refresh_joint_widget(context, joints[ind_joint], ind_joint, anchor_gizmo_name_a)
+
+         # ob = context.object
+        self.joints = list()
+        duplicates = set()
+        anchor_gizmo_name_a = self.anchor_gizmo_name_a()
+        # anchor_gizmo_name_b = self.anchor_gizmo_name_b()
+        for joint in joints:
+            for ob in context.selected_objects:
+                if (joint not in duplicates and joint.body_a is not None and joint.body_b is not None and (ob == joint.body_a or ob == joint.body_b)):
+                    duplicates.add(joint)
+                    self.joints.append(joint)
+                    self.refresh_joint_widget(context, joints[ind_joint], ind_joint, anchor_gizmo_name_a)
+                    # self.refresh_joint_widget(context, joint, ind_joint, len_anchors_widgets, anchor_gizmo_name_a, anchor_gizmo_name_b)
+                    ind_joint+=1
+        # self.remove_joint_widgets(context, ind_joint, len_anchors_widgets)
             
-        self.remove_joint_widgets(context, len(joints))
+        self.remove_joint_widgets(context, len(self.joints))
 
     def refresh(self, context: Context):
         self.refresh_widgets(context)
@@ -128,20 +143,20 @@ class Physics2DJointEditGizmo(GizmoGroup):
         orientation_mat = get_plan_matrix(plan_direction)
         # plan_mat = get_plan_matrix(plan_direction)
 
-        body_a = self.get_body_a(context)
-        matrix_world = body_a.matrix_world
-        body_a_world_mat = clamp_matrix_to_plan(plan_direction, matrix_world)
-        self.cached_object_a_inv_scale_mat = self.object_inv_scale_mat(context, context.object.matrix_world)    
-
         for joint_ind in range(len(self.joints)):
             joint = self.joints[joint_ind]
             if(joint.body_b is None):
                 continue
             
-            ob_b = joint.body_b
-            matrix_world = ob_b.matrix_world
+            body_a = joint.body_a
+            matrix_world = body_a.matrix_world
+            body_a_world_mat = clamp_matrix_to_plan(plan_direction, matrix_world)
+            self.cached_object_a_inv_scale_mat = self.object_inv_scale_mat(context, matrix_world)    
+
+            body_b = joint.body_b
+            matrix_world = body_b.matrix_world
             body_b_world_mat = clamp_matrix_to_plan(plan_direction, matrix_world)
-            self.cached_object_b_inv_scale_mat = self.object_inv_scale_mat(context, ob_b.matrix_world)    
+            self.cached_object_b_inv_scale_mat = self.object_inv_scale_mat(context, body_b.matrix_world)    
             
             self.update_widget_matrix(
                 context,

@@ -5,7 +5,6 @@ from .physics_2d_revolute_joint_edit_gizmo import Physics2DRevoluteJointEditGizm
 from .physics_2d_prismatic_joint_edit_gizmo import Physics2DPrismaticJointEditGizmo
 from .physics_2d_distance_joint_edit_gizmo import Physics2DDistanceJointEditGizmo
 from .physics_2d_wheel_joint_edit_gizmo import Physics2DWheelJointEditGizmo
-from .physics_2d_rope_joint_edit_gizmo import Physics2DRopeJointEditGizmo
 
 
 classes = (
@@ -13,7 +12,6 @@ classes = (
     Physics2DPrismaticJointEditGizmo,
     Physics2DDistanceJointEditGizmo,
     Physics2DWheelJointEditGizmo,
-    # Physics2DRopeJointEditGizmo,
 )
 
 def register_joints_groups():

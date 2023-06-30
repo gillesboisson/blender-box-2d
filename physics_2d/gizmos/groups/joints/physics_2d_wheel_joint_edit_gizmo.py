@@ -1,5 +1,6 @@
 from bpy.props import *
 from .physics_2d_prismatic_joint_edit_gizmo import Physics2DPrismaticJointEditGizmo
+import bpy
 
 
 from ....utils import physics_2d_can_edit_wheel_joint, display_joint
@@ -25,8 +26,15 @@ class Physics2DWheelJointEditGizmo(Physics2DBaseLimitJointEditGizmo):
 
 
     def get_joint_props(self, context):
-        return context.object.physics_2d_joints.wheel_joints
-    
+        joints = list()
+
+
+        for ob in bpy.data.objects:
+            if hasattr(ob,"physics_2d_joints") and hasattr(ob.physics_2d_joints,"wheel_joints"):
+                for joint in ob.physics_2d_joints.wheel_joints:
+                    joints.append(joint)     
+
+        return joints
 
 
     def anchor_gizmo_name_a(self):

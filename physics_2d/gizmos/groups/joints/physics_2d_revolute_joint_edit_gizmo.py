@@ -3,6 +3,7 @@ from bpy.props import *
 from ....utils import display_joint, physics_2d_enabled_and_mesh_selected
 from .physics_2d_joint_edit_gizmo import Physics2DJointEditGizmo
 from ...widgets.joints.physics_2d_revolute_anchor_widget import Physics2DRevoluteAnchorMoveWidget
+import bpy
 
 class Physics2DRevoluteJointEditGizmo(Physics2DJointEditGizmo):
     bl_idname = "VIEW3D_GT_physics_2d_revolute_joint_edit_gizmo"
@@ -20,7 +21,15 @@ class Physics2DRevoluteJointEditGizmo(Physics2DJointEditGizmo):
             
 
     def get_joint_props(self, context):
-        return context.object.physics_2d_joints.revolute_joints
+        joints = list()
+
+
+        for ob in bpy.data.objects:
+            if hasattr(ob,"physics_2d_joints") and hasattr(ob.physics_2d_joints,"revolute_joints"):
+                for joint in ob.physics_2d_joints.revolute_joints:
+                    joints.append(joint)
+
+        return joints           
     
 
     def anchor_gizmo_name_a(self):

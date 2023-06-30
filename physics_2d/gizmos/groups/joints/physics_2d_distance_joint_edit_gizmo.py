@@ -1,6 +1,8 @@
 from math import acos
 from bpy.props import *
 
+import bpy
+
 from bpy.types import Context
 
 from mathutils import Matrix, Vector
@@ -164,7 +166,18 @@ class Physics2DDistanceJointEditGizmo(Physics2DJointEditGizmo):
 
                         
     def get_joint_props(self, context):
-        return context.object.physics_2d_joints.distance_joints
+
+        joints = list()
+
+
+        for ob in bpy.data.objects:
+            if hasattr(ob,"physics_2d_joints") and hasattr(ob.physics_2d_joints,"distance_joints"):
+                for joint in ob.physics_2d_joints.distance_joints:
+                    joints.append(joint)                 
+
+
+        return joints
+        # return context.object.physics_2d_joints.distance_joints
         
     
 
