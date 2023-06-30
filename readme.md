@@ -1,6 +1,6 @@
-# Blender box2D integration
+# Blender Box2D
 
-Blender plugins for box2D integration. Tools for editing rigid body, shapes and joint. As properties are custom properties it is saved as extra data when it is exported with tools la gltf exporter.
+Blender Box 2D is a blender plugin that helps integrate a scene with Box 2D physics engine. It allows to edit object physics properties like rigid bodies and joints in blender using custom panel and gizmos. Physics properties are exportable through custom properties. This plugin has been mainly used with gltf in mind and has been tested with ThreeJS application (ThreeJS typescript package will be available), but it can be used in engine that can parse GLTF and initiate box2D physics through GLTS extra properties (more details in data section).
 
 ## License
 
